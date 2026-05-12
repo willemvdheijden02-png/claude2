@@ -22,6 +22,7 @@ import type {
   GeneratedImage,
   Message,
   StudioMode,
+  VideoRequest,
 } from "@/lib/studio/types";
 import {
   deleteChat,
@@ -34,6 +35,7 @@ import {
 } from "@/lib/studio/store";
 
 const tabs: { id: StudioMode; icon: typeof ImageIcon; label: string }[] = [
+  { id: "video", icon: Video, label: "Video" },
   { id: "reports", icon: FileBarChart, label: "Rapporten" },
   { id: "images", icon: ImageIcon, label: "Beelden" },
   { id: "scripts", icon: MessageSquare, label: "Scripts" },
@@ -45,6 +47,7 @@ const placeholders: Record<StudioMode, string> = {
   scripts: "Welk product? Welke hook-stijl? Welke lengte?",
   ideas: "Welk platform? Welke vibe? Welk product?",
   reports: "Welke periode? Welke klant? Plak je cijfers of upload CSV...",
+  video: "Beschrijf de video — wie, wat, sfeer, productie-stijl...",
 };
 
 const modelLabels: Record<StudioMode, string> = {
@@ -52,6 +55,7 @@ const modelLabels: Record<StudioMode, string> = {
   scripts: "CLAUDE SONNET 4.6",
   ideas: "CLAUDE SONNET 4.6",
   reports: "CLAUDE SONNET 4.6",
+  video: "HIGGSFIELD · SEEDANCE 2.0",
 };
 
 const modeLabels: Record<StudioMode, string> = {
@@ -59,6 +63,7 @@ const modeLabels: Record<StudioMode, string> = {
   scripts: "Scripts",
   ideas: "Ideeën",
   reports: "Rapport",
+  video: "Video",
 };
 
 function newChatId() {
@@ -169,7 +174,44 @@ export default function StudioPage() {
     setIsStreaming(true);
 
     try {
-      if (mode === "images") {
+      if (mode === "video") {
+        const res = await fetch("/api/chat/video", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            prompt: userPrompt,
+            aspectRatio: "9:16",
+            duration: 5,
+          }),
+        });
+        const data = await res.json();
+        if (data.error) {
+          setMessages((m) => [
+            ...m,
+            {
+              id: `a-${Date.now()}`,
+              role: "assistant",
+              mode: "scripts",
+              content: `⚠️ ${data.error}`,
+            },
+          ]);
+        } else {
+          const videoMsg: Message = {
+            id: `a-${Date.now()}`,
+            role: "assistant",
+            mode: "video",
+            videoRequest: {
+              requestId: data.requestId,
+              status: "pending",
+              prompt: userPrompt,
+              aspectRatio: "9:16",
+              duration: 5,
+              estimatedTurnaround: data.estimatedTurnaround ?? "~4 uur",
+            },
+          };
+          setMessages((m) => [...m, videoMsg]);
+        }
+      } else if (mode === "images") {
         const res = await fetch("/api/chat/images", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -490,12 +532,18 @@ function EmptyState({
       "Maandelijks rapport voor Slaapwijs — geef voorbeeld-data en typische learnings",
       "Wekelijks rapport voor Hopper Lingerie — focus op wat onderpresteerde",
     ],
+    video: [
+      "Vrouw van 55 wordt rustig wakker zonder nekpijn — UGC slow motion, soft morning light",
+      "Close-up van een vrouw die een BH past en glimlacht — natuurlijk, herkenbaar, geen drama",
+      "POV van slaapkussen unboxing in een gezellige slaapkamer, vrouw 50+ test het uit",
+    ],
   };
   const titles: Record<StudioMode, string> = {
     images: "Beelden genereren",
     scripts: "Scripts schrijven",
     ideas: "Video-ideeën brainstormen",
     reports: "Rapport schrijven",
+    video: "Video genereren",
   };
   return (
     <div className="max-w-2xl mx-auto pt-12 text-center">
@@ -584,6 +632,10 @@ function MessageBubble({ message }: { message: Message }) {
     );
   }
 
+  if (message.mode === "video") {
+    return <VideoRequestCard request={message.videoRequest} />;
+  }
+
   return (
     <div>
       <AssistantHeader />
@@ -593,6 +645,73 @@ function MessageBubble({ message }: { message: Message }) {
       {message.mode === "reports" && message.content.length > 100 && (
         <DownloadReportButton content={message.content} />
       )}
+    </div>
+  );
+}
+
+function VideoRequestCard({ request }: { request: VideoRequest }) {
+  return (
+    <div>
+      <AssistantHeader subtitle="Video productie aangevraagd" />
+      <div className="max-w-2xl border border-[var(--border-default)] rounded-[var(--radius-lg)] bg-[var(--bg-surface)] overflow-hidden">
+        <div
+          className={cn(
+            "aspect-[9/16] max-h-[400px] w-full bg-gradient-to-br grid place-items-center text-white text-center p-6",
+            request.status === "done"
+              ? "from-emerald-900/40 to-teal-700/30"
+              : request.status === "failed"
+              ? "from-red-900/40 to-rose-700/30"
+              : "from-violet-900/40 to-indigo-700/30"
+          )}
+        >
+          {request.videoUrl ? (
+            // eslint-disable-next-line jsx-a11y/media-has-caption
+            <video src={request.videoUrl} controls className="w-full h-full object-cover" />
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              <div className="size-12 rounded-full bg-white/10 grid place-items-center mb-2">
+                <Sparkles className="size-6 animate-pulse" />
+              </div>
+              <div className="text-[14px] font-medium">
+                {request.status === "pending"
+                  ? "In de wachtrij"
+                  : request.status === "in_progress"
+                  ? "Wordt nu gerendered"
+                  : request.status === "done"
+                  ? "Klaar"
+                  : "Mislukt"}
+              </div>
+              <div className="text-[11px] text-white/60">
+                ETA {request.estimatedTurnaround}
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="p-4 space-y-2">
+          <div className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-tertiary)] font-medium">
+            Prompt
+          </div>
+          <div className="text-[12px] text-[var(--text-secondary)] leading-relaxed italic">
+            &ldquo;{request.prompt}&rdquo;
+          </div>
+          <div className="flex items-center gap-3 text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] pt-2 border-t border-[var(--border-default)]">
+            <span>{request.aspectRatio}</span>
+            <span>·</span>
+            <span>{request.duration}s</span>
+            <span>·</span>
+            <span>Seedance 2.0</span>
+            <span className="ml-auto">Request {request.requestId.slice(0, 8)}</span>
+          </div>
+        </div>
+      </div>
+      <div className="mt-2 text-[11px] text-[var(--text-tertiary)] max-w-2xl">
+        Video productie is operator-fulfilled. Je krijgt een notificatie zodra je video klaar is.
+        Volg de status op{" "}
+        <a href="/portal/requests" className="text-[var(--accent-500)] underline">
+          /portal/requests
+        </a>
+        .
+      </div>
     </div>
   );
 }
