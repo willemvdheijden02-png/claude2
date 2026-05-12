@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Willoe — Design Tokens
+   See agency-platform/DESIGN.md for rationale.
+   ============================================================ */
+
+:root {
+  color-scheme: dark;
+
+  /* Surfaces — dark default */
+  --bg-canvas: #0a0a0a;
+  --bg-surface: #111111;
+  --bg-surface-2: #161616;
+  --bg-surface-hover: #1a1a1a;
+
+  /* Borders */
+  --border-default: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.12);
+
+  /* Text */
+  --text-primary: rgb(255 255 255 / 0.95);
+  --text-secondary: rgb(255 255 255 / 0.65);
+  --text-tertiary: rgb(255 255 255 / 0.40);
+  --text-disabled: rgb(255 255 255 / 0.25);
+
+  /* Accent — agency overschrijft deze runtime via inline style */
+  --accent-50: #ecfdf5;
+  --accent-500: #10b981;
+  --accent-600: #059669;
+  --accent-glow: rgb(16 185 129 / 0.15);
+
+  /* Status */
+  --status-success: #10b981;
+  --status-warning: #f59e0b;
+  --status-danger: #ef4444;
+  --status-info: #3b82f6;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Transitions */
+  --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg-canvas: #fafafa;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #f5f5f5;
+  --bg-surface-hover: #f0f0f0;
+  --border-default: rgb(0 0 0 / 0.08);
+  --border-strong: rgb(0 0 0 / 0.12);
+  --text-primary: rgb(0 0 0 / 0.92);
+  --text-secondary: rgb(0 0 0 / 0.62);
+  --text-tertiary: rgb(0 0 0 / 0.42);
+  --text-disabled: rgb(0 0 0 / 0.25);
+}
+
+/* ============================================================
+   Tailwind theme — expose tokens as utility classes
+   ============================================================ */
+
+@theme inline {
+  /* Surface */
+  --color-canvas: var(--bg-canvas);
+  --color-surface: var(--bg-surface);
+  --color-surface-2: var(--bg-surface-2);
+  --color-surface-hover: var(--bg-surface-hover);
+
+  /* Border */
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+
+  /* Text */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-disabled: var(--text-disabled);
+
+  /* Accent */
+  --color-accent: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+
+  /* Status */
+  --color-success: var(--status-success);
+  --color-warning: var(--status-warning);
+  --color-danger: var(--status-danger);
+  --color-info: var(--status-info);
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "JetBrains Mono", monospace;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Type scale */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.8125rem;   /* 13px */
+  --text-base: 0.875rem;  /* 14px */
+  --text-md: 0.9375rem;   /* 15px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.375rem;    /* 22px */
+  --text-2xl: 1.75rem;    /* 28px */
+  --text-3xl: 2.25rem;    /* 36px */
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+
+* {
+  border-color: var(--border-default);
+}
+
+body {
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tabular nums voor data */
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Tight tracking voor display sizes */
+.tracking-display { letter-spacing: -0.02em; }
+
+/* Selection */
+::selection {
+  background: var(--accent-glow);
+  color: var(--accent-50);
+}
+
+/* Focus ring helper */
+.focus-accent:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bg-canvas), 0 0 0 4px var(--accent-glow);
+}
+
+/* Glow shadow on hover voor primary buttons */
+.glow-accent {
+  box-shadow: 0 0 0 0 var(--accent-glow);
+  transition: box-shadow var(--transition-base);
+}
+.glow-accent:hover {
+  box-shadow: 0 8px 24px -4px var(--accent-glow);
+}
+
+/* Scrollbar — subtle */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 2px solid var(--bg-canvas);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}

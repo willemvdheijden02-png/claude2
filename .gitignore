@@ -1,0 +1,33 @@
+# Env files — NEVER commit
+.env
+.env.local
+.env.*.local
+
+# Build output
+web/.next/
+web/node_modules/
+web/out/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Vercel
+.vercel/
+
+# TypeScript
+*.tsbuildinfo
+web/next-env.d.ts
+
+# Local Claude Code cache
+.claude/cache/
+.claude/sessions/
