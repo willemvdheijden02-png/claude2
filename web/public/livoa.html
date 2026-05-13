@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Ecom Dashboard — Feature Tour · Willoe AI</title>
+<meta name="description" content="Het besturingssysteem voor je hele ecom-business. KPI sync, 8 AI-agents, concurrent monitor, mobile-first — in vijf hoofdstukken uitgelegd." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/shared.css" />
+<style>
+  .page-hero { padding: 64px 0 32px; text-align: center; }
+  .page-hero .display { max-width: 1000px; margin: 0 auto 20px; }
+  .page-hero .lede   { margin: 0 auto 32px; }
+  .page-hero__visual {
+    max-width: 1200px; margin: 56px auto 0;
+    border-radius: 28px; overflow: hidden;
+    box-shadow: 0 60px 120px -40px rgba(26,26,26,.45);
+  }
+  .page-hero__visual img { width: 100%; display: block; }
+
+  .feature-row__visual img,
+  .feature-row__visual video {
+    border-radius: 16px;
+    box-shadow: 0 40px 80px -30px rgba(26,26,26,.40);
+    width: 100%; display: block;
+  }
+
+  .toc { background: var(--bg-warm); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); padding: 24px 0; }
+  .toc__inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; display: flex; flex-wrap: wrap; gap: 22px; align-items: center; font-size: 14px; color: var(--ink-mute); }
+  .toc__inner strong { color: var(--ink); margin-right: 8px; }
+  .toc__inner a { color: var(--ink-soft); font-weight: 500; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line); }
+  .toc__inner a:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+  .features { padding: 0 0 64px; }
+  .features .container { padding-top: 24px; }
+
+  /* Two-column list within a feature row */
+  .feat-cols {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 28px;
+    margin-top: 18px;
+  }
+  .feat-cols div { padding: 8px 0; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 15px; }
+  .feat-cols div b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
+
+  .ugc { background: var(--bg-elev); color: var(--ink); padding: clamp(80px, 10vw, 140px) 0; text-align: center; }
+  .ugc .h2 { color: #FFF; }
+  .ugc .kicker { color: rgba(255,255,255,.6); }
+  .ugc__player { max-width: 1100px; margin: 48px auto 0; border-radius: 28px; overflow: hidden; box-shadow: 0 60px 120px -40px rgba(0,0,0,.7); }
+  .ugc__player video { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+
+  .summary { padding: clamp(64px, 8vw, 112px) 0; background: var(--bg-soft); text-align: center; }
+  .summary__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 48px; }
+  .summary__pill { background: var(--card); border-radius: 16px; padding: 22px 24px; border: 1px solid var(--line-soft); text-align: left; }
+  .summary__pill h4 { font-family: var(--serif); font-weight: 500; margin: 0 0 4px; font-size: 19px; }
+  .summary__pill p { margin: 0; color: var(--ink-soft); font-size: 14.5px; }
+
+  @media (max-width: 980px) { .summary__grid { grid-template-columns: 1fr 1fr; } .feat-cols { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .summary__grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__dot"></span>
+      <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html">Welkom</a>
+      <a href="livoa.html" class="is-active">Ecom Dashboard</a>
+      <a href="willoe.html">Agency Dashboard</a>
+      <a href="agents.html">AI Agents</a>
+      <a href="contact.html">Afspraak</a>
+    </nav>
+    <a href="contact.html" class="btn btn--solid">Plan een demo →</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ───── PAGE HERO ───── -->
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow__dot"></span> 01 · Ecom Dashboard</span>
+    <h1 class="display">Eén plek voor je hele <em>ecom-business</em>.</h1>
+    <p class="lede lede--center">
+      Geen marketingdashboard, maar een echt ecom-besturingssysteem.
+      Sales, ads, klantenservice, voorraad, content, research — alles wat een
+      e-commerce founder of operator dagelijks aanraakt, in één scherm.
+    </p>
+    <div style="display:flex; gap:12px; justify-content:center;">
+      <a href="contact.html" class="btn btn--solid btn--lg">Plan een afspraak →</a>
+      <a href="#features" class="btn btn--ghost btn--lg">Bekijk features</a>
+    </div>
+
+    <div class="page-hero__visual">
+      <img src="assets/images/3d-livoa-macbook.png" alt="Ecom Dashboard op een MacBook" />
+    </div>
+  </div>
+</section>
+
+<!-- ───── TOC (5 sections) ───── -->
+<nav class="toc" aria-label="Sectie-overzicht">
+  <div class="toc__inner">
+    <strong>5 hoofdstukken:</strong>
+    <a href="#overzicht">Live overzicht</a>
+    <a href="#agents">AI agents</a>
+    <a href="#research">Research & content</a>
+    <a href="#mobiel">Mobiel & integraties</a>
+    <a href="#cijfers">Cijfers</a>
+  </div>
+</nav>
+
+<!-- ───── FEATURES — 5 SECTIONS ───── -->
+<section class="features" id="features">
+  <div class="container">
+
+    <!-- 01 · Live overzicht — combines Overzicht + KPI Sync + Meta Ads cockpit -->
+    <div class="feature-row" id="overzicht">
+      <div class="feature-row__copy">
+        <span class="step">01 · Live overzicht</span>
+        <h2 class="h3">Sales, spend en marges — elke ochtend om 08:00 binnen.</h2>
+        <p>
+          Bij login zie je hoe je ecom-business er écht voor staat. Live KPI's
+          uit Meta Ads, Shopify, COGS en ROAS. Daarnaast direct campagne-beheer
+          via de Meta Ads MCP — pauzeer ads, verhoog budget, vraag een audit op,
+          zonder Ads Manager te openen.
+        </p>
+        <div class="feat-cols">
+          <div><b>Live KPI sync</b>Meta Spend · Shopify Omzet · COGS · ROAS rolling 30d</div>
+          <div><b>"Sync nu" knop</b>Real-time refresh voor een sales call of meeting</div>
+          <div><b>Drempels per metric</b>Agent stuurt alert bij KPI drift</div>
+          <div><b>Meta Ads MCP</b>Twee accounts parallel, bulk-acties direct</div>
+          <div><b>Pixel + CAPI health</b>EMQ-scores, catalogus diagnose</div>
+          <div><b>Acties-nodig kaart</b>Wat moet vandaag van jou gebeuren</div>
+        </div>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/livoa-overzicht.png" alt="Ecom Dashboard — live overzicht met KPI's en acties" />
+      </div>
+    </div>
+
+    <!-- 02 · AI Agents — combines Agents + Creative -->
+    <div class="feature-row feature-row--reverse" id="agents">
+      <div class="feature-row__copy">
+        <span class="step">02 · AI agents</span>
+        <h2 class="h3">Acht specialisten voor je hele ecom-stack.</h2>
+        <p>
+          Marketing, Creative, SEO, Analytics, Research, Service, CRM en Automatie —
+          getraind op jouw merk en doelgroep. Schrijf ad-copy in 3 varianten, vraag
+          een creatieve brief uit een concurrent-URL, draai een win-back flow in Klaviyo,
+          of laat de Service agent een Gorgias-ticket beantwoorden in NL of DE.
+        </p>
+        <div class="feat-cols">
+          <div><b>Marketing</b>Ads strategie · copy in 3 varianten · budget</div>
+          <div><b>Creative</b>Concurrent-URL → scripts, hooks, foto-ideeën</div>
+          <div><b>SEO</b>Audits, technische checks, content briefs</div>
+          <div><b>Analytics</b>CPA-diagnostics, anomaly detection, ROAS forecast</div>
+          <div><b>Research</b>Dagelijkse concurrent scan + trend monitoring</div>
+          <div><b>Service · CRM · Automatie</b>NL/DE templates · Klaviyo flows · cron</div>
+        </div>
+        <p style="margin-top:18px;">
+          <a href="agents.html" class="btn btn--ghost">Bekijk alle 8 agents →</a>
+        </p>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/3d-agents-imac.png" alt="AI Agents chat op iMac" />
+      </div>
+    </div>
+
+    <!-- 03 · Research & content — combines SEO + Creative tool + Concurrent monitor -->
+    <div class="feature-row" id="research">
+      <div class="feature-row__copy">
+        <span class="step">03 · Research & content</span>
+        <h2 class="h3">Vóór je koffie weet je wat je rivalen vandaag deden.</h2>
+        <p>
+          De Research-engine scant elke dag de Meta Ads Library, Pinterest en
+          TikTok voor jouw niche. Het Creative Strategy Tool plakt een concurrent
+          URL erin en krijgt een complete brief. De SEO-engine pakt Search Console,
+          PageSpeed en CrUX onder één tab — inclusief automatische Core Web Vitals
+          checks en content gaps.
+        </p>
+        <div class="feat-cols">
+          <div><b>Concurrent Monitor</b>Best Life, Derila, Emma, jouw eigen lijst</div>
+          <div><b>Trend monitor</b>Pinterest + TikTok — 4-8 weken vóór Meta</div>
+          <div><b>Creative tool</b>URL in → scripts + hooks + copy out</div>
+          <div><b>SEO audit</b>Technical · content · backlinks · quick wins</div>
+          <div><b>Google data</b>Clicks, impressions, CTR, positie per pagina</div>
+          <div><b>AI-search ready</b>GEO optimalisatie voor ChatGPT en Perplexity</div>
+        </div>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/livoa-creative.png" alt="Research & content tools in Ecom Dashboard" />
+      </div>
+    </div>
+
+    <!-- 04 · Mobiel & integraties -->
+    <div class="feature-row feature-row--reverse" id="mobiel">
+      <div class="feature-row__copy">
+        <span class="step">04 · Mobiel & integraties</span>
+        <h2 class="h3">In je broekzak, gekoppeld aan je hele toolstack.</h2>
+        <p>
+          KPI's, alerts en quick acties draaien op telefoon zonder aparte app.
+          Klaviyo, Meta, Shopify, Gorgias en WhatsApp zijn out-of-the-box live.
+          Eén login, één meter, één plek waar je ziet of een API down is.
+        </p>
+        <div class="feat-cols">
+          <div><b>Klaviyo</b>Welkom · win-back · post-purchase flows</div>
+          <div><b>Shopify</b>Orders, voorraad, kortingen, GraphQL custom</div>
+          <div><b>Gorgias</b>NL + DE templates klaar, tickets binnen dashboard</div>
+          <div><b>Meta Ads</b>Twee accounts, pixel + CAPI health, EMQ</div>
+          <div><b>WhatsApp Flows</b>Opt-in en flow-builder zodra Phone ID staat</div>
+          <div><b>Mobiel-first</b>Push-alerts · SSO · magic-link login</div>
+        </div>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/3d-livoa-iphone.png" alt="Ecom Dashboard op iPhone — KPI's onderweg" />
+      </div>
+    </div>
+
+    <!-- 05 · Cijfers / Outcome -->
+    <div class="feature-row" id="cijfers">
+      <div class="feature-row__copy">
+        <span class="step">05 · Cijfers</span>
+        <h2 class="h3">Wat dit voor je business doet.</h2>
+        <p>
+          Geen marketing-praatjes, gewoon meetbare verschillen tussen 7 losse
+          tools en één Ecom Dashboard met agents eronder.
+        </p>
+        <div class="feat-cols">
+          <div><b>4×</b>sneller dan je huidige toolstack</div>
+          <div><b>14u</b>gemiddelde turnaround per audit of run</div>
+          <div><b>9</b>modules live · 4 in beta</div>
+          <div><b>0</b>copy-paste tussen 7 tools</div>
+          <div><b>5</b>integraties standaard aangesloten</div>
+          <div><b>2</b>brands parallel zonder context-switch</div>
+        </div>
+        <p style="margin-top:18px;">
+          <a href="contact.html" class="btn btn--solid">Plan een afspraak →</a>
+        </p>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/livoa-integrations.png" alt="Cijfers en integraties paneel" />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───── UGC video ───── -->
+<section class="ugc">
+  <div class="container">
+    <span class="kicker kicker--center">In actie</span>
+    <h2 class="h2 h2--center">Zo werkt het in het echt.</h2>
+    <p class="lede lede--center" style="color:rgba(255,255,255,.7);">
+      Een korte film van een ecom-operator die met het dashboard werkt — van koffie naar concrete actie in 90 seconden.
+    </p>
+    <div class="ugc__player">
+      <video src="assets/videos/livoa-ugc.mp4" autoplay loop muted playsinline poster="assets/images/livoa-ugc-poster.jpg"></video>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div>
+      <span class="brand">
+        <span class="brand__dot"></span>
+        <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+      </span>
+      <p class="foot__line">Het besturingssysteem voor moderne ecom-businesses.</p>
+    </div>
+    <div class="foot__cols">
+      <div><h5>Product</h5>
+        <a href="livoa.html">Ecom Dashboard</a>
+        <a href="willoe.html">Agency Dashboard</a>
+        <a href="agents.html">AI Agents</a>
+      </div>
+      <div><h5>Juridisch</h5>
+        <a href="privacy.html">Privacybeleid</a>
+        <a href="terms.html">Algemene voorwaarden</a>
+        <a href="cookies.html">Cookies</a>
+      </div>
+      <div><h5>Bedrijf</h5>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html">Plan demo</a>
+        <a href="contact.html">via Calendly</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot__bottom">© 2026 Willoe AI · Gebouwd in NL</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(()=>{}) : e.target.pause()), { threshold: 0.25 });
+  document.querySelectorAll('video').forEach(v => io.observe(v));
+</script>
+</body>
+</html>

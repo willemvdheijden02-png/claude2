@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Agency Dashboard — Feature Tour · Willoe AI</title>
+<meta name="description" content="Het besturingssysteem voor moderne ad-agencies. Klanten · service-catalogus · queue · rapporten · facturatie — in vijf hoofdstukken." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/shared.css" />
+<style>
+  .page-hero { padding: 64px 0 32px; text-align: center; }
+  .page-hero .display { max-width: 1000px; margin: 0 auto 20px; }
+  .page-hero .lede { margin: 0 auto 32px; }
+  .page-hero__visual {
+    max-width: 1200px; margin: 56px auto 0;
+    border-radius: 28px; overflow: hidden;
+    box-shadow: 0 60px 120px -40px rgba(26,26,26,.45);
+  }
+  .page-hero__visual img { width: 100%; display: block; }
+
+  .feature-row__visual img,
+  .feature-row__visual video {
+    border-radius: 16px;
+    box-shadow: 0 40px 80px -30px rgba(26,26,26,.40);
+    width: 100%; display: block;
+  }
+
+  .toc { background: var(--bg-warm); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); padding: 24px 0; }
+  .toc__inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; font-size: 14px; color: var(--ink-mute); }
+  .toc__inner strong { color: var(--ink); margin-right: 8px; }
+  .toc__inner a { color: var(--ink-soft); font-weight: 500; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line); }
+  .toc__inner a:hover { background: var(--ink); color: #FFF; border-color: var(--ink); }
+
+  .feat-cols {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 28px;
+    margin-top: 18px;
+  }
+  .feat-cols div { padding: 8px 0; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 15px; }
+  .feat-cols div b { display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px; }
+
+  .ugc { background: var(--bg-elev); color: var(--ink); padding: clamp(80px, 10vw, 140px) 0; text-align: center; }
+  .ugc .h2 { color: var(--ink); }
+  .ugc .kicker { color: var(--ink-mute); }
+  .ugc__player { max-width: 1100px; margin: 48px auto 0; border-radius: 28px; overflow: hidden; box-shadow: 0 60px 120px -40px rgba(0,0,0,.7); }
+  .ugc__player video { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+
+  @media (max-width: 980px) { .feat-cols { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__dot"></span>
+      <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html">Welkom</a>
+      <a href="livoa.html">Ecom Dashboard</a>
+      <a href="willoe.html" class="is-active">Agency Dashboard</a>
+      <a href="agents.html">AI Agents</a>
+      <a href="contact.html">Afspraak</a>
+    </nav>
+    <a href="contact.html" class="btn btn--solid">Plan een demo →</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ───── PAGE HERO ───── -->
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow__dot"></span> 02 · Agency Dashboard</span>
+    <h1 class="display">Het portaal dat je <em>agency</em> volwassen maakt.</h1>
+    <p class="lede lede--center">
+      Onboard klanten in 24 uur. Lever gebrande rapporten. Draai AI-skills op aanvraag.
+      Alles wat een agency-owner dagelijks aanraakt — in vijf hoofdstukken.
+    </p>
+    <div style="display:flex; gap:12px; justify-content:center;">
+      <a href="contact.html" class="btn btn--solid btn--lg">Plan een afspraak →</a>
+      <a href="#features" class="btn btn--ghost btn--lg">Bekijk features</a>
+    </div>
+
+    <div class="page-hero__visual">
+      <img src="assets/images/3d-willoe-macbook.png" alt="Agency Dashboard op een MacBook" />
+    </div>
+  </div>
+</section>
+
+<!-- ───── TOC (5 sections) ───── -->
+<nav class="toc" aria-label="Sectie-overzicht">
+  <div class="toc__inner">
+    <strong>5 hoofdstukken:</strong>
+    <a href="#overzicht">Overzicht & klanten</a>
+    <a href="#workflow">Services & queue</a>
+    <a href="#agents">Agents & ads</a>
+    <a href="#deliverables">Rapporten & billing</a>
+    <a href="#platform">Platform & admin</a>
+  </div>
+</nav>
+
+<!-- ───── FEATURES — 5 SECTIONS ───── -->
+<section class="features" id="features" style="padding:0 0 64px;">
+  <div class="container" style="padding-top:24px;">
+
+    <!-- 01 · Overzicht & Klanten -->
+    <div class="feature-row" id="overzicht">
+      <div class="feature-row__copy">
+        <span class="step">01 · Overzicht & klanten</span>
+        <h2 class="h3">Eén dashboard. Jouw hele klantenboek.</h2>
+        <p>
+          Bij login zie je direct hoe je agency draait: hoeveel onboardings dit kwartaal,
+          hoeveel actieve clients, pending requests en geleverde rapporten. Elke klant
+          heeft zijn eigen workspace met magic-link login, status, history en facturen.
+        </p>
+        <div class="feat-cols">
+          <div><b>Live quota</b>Onboardings per maand, gem. turnaround in uren</div>
+          <div><b>84 klanten</b>Eén dashboard zonder vertraging</div>
+          <div><b>Quick filter</b>Wachtend · bezig · klaar · overdue</div>
+          <div><b>Snel-start</b>Vier meest gevraagde services in één klik</div>
+          <div><b>Magic-link onboarding</b>Geen wachtwoord vergeten</div>
+          <div><b>Per-klant theming</b>Kleurpalet en logo voor elke workspace</div>
+        </div>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/portal/willoe-portal-overzicht.png" alt="Fullscreen Agency Dashboard overzicht — quota, clients, KPI tiles" />
+      </div>
+    </div>
+
+    <!-- 02 · Services & queue -->
+    <div class="feature-row feature-row--reverse" id="workflow">
+      <div class="feature-row__copy">
+        <span class="step">02 · Services & queue</span>
+        <h2 class="h3">Vaste prijs. Vaste turnaround. Geen e-mail-tennis.</h2>
+        <p>
+          Vier kerndiensten staan op de plank — Meta Audit, SEO Audit, Static Remix,
+          Onboarding — met SLA's en deliverables vooraf vastgelegd. Klant bestelt vanuit
+          z'n eigen workspace, jouw team krijgt een ticket in de queue, klant ziet de
+          status real-time. Klaar.
+        </p>
+        <div class="feat-cols">
+          <div><b>Service-cards</b>Vaste prijs, vaste turnaround, sample-output</div>
+          <div><b>Workflow-engine</b>Triggert de juiste agent + checklist</div>
+          <div><b>Live queue</b>5 wachtend · 1 bezig · gem. 14u turnaround</div>
+          <div><b>SLA-risk sort</b>Wat dreigt te laat te zijn, eerst</div>
+          <div><b>Klant-aanvragen</b>Tickets met file-upload en briefing</div>
+          <div><b>Status real-time</b>WACHT → BEZIG → KLAAR voor de klant</div>
+        </div>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/fullscreen-services.png" alt="Fullscreen Service-catalogus view in Agency Dashboard" />
+      </div>
+    </div>
+
+    <!-- 03 · Agents & ads -->
+    <div class="feature-row" id="agents">
+      <div class="feature-row__copy">
+        <span class="step">03 · Agents & ads</span>
+        <h2 class="h3">AI-skills + multi-account Ads Manager onder één dak.</h2>
+        <p>
+          Acht agents draaien hier ook — gericht op agency-werk: audits voor klanten,
+          briefs, win-back flows, wekelijkse anomaly-checks. De Ads Manager aggregeert
+          Meta + Google over al je klanten, met alerting bij CPC-spikes en CVR-drops.
+        </p>
+        <div class="feat-cols">
+          <div><b>Skills per service</b>Eén klik start, output in rapport-template</div>
+          <div><b>Multi-account view</b>Meta + Google over al je klanten</div>
+          <div><b>Alerting</b>CPC-spikes, CVR-drops, frequency cap doorbroken</div>
+          <div><b>Wekelijkse PDF</b>Gebrand voor jouw agency, mailt zichzelf</div>
+          <div><b>Per-team permissies</b>Geen junior die productie pauzeert</div>
+          <div><b>Credit-meter</b>Zichtbaar per agency-run, geen verrassingen</div>
+        </div>
+        <p style="margin-top:18px;"><a href="agents.html" class="btn btn--ghost">Bekijk alle 8 agents →</a></p>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/real-portal-macbook-top.png" alt="Ads Manager + agents op MacBook bovenaanzicht" />
+      </div>
+    </div>
+
+    <!-- 04 · Rapporten & facturatie -->
+    <div class="feature-row feature-row--reverse" id="deliverables">
+      <div class="feature-row__copy">
+        <span class="step">04 · Rapporten & facturatie</span>
+        <h2 class="h3">Gebrande deliverables. Stripe-billing eronder.</h2>
+        <p>
+          Elk rapport komt automatisch in jouw kleuren, jouw logo, jouw font.
+          11 rapporten geleverd deze maand, allemaal download-klaar. Eronder draait
+          Stripe — per-klant subscriptions, eenmalige services, addons en credits.
+        </p>
+        <div class="feat-cols">
+          <div><b>Gebrand</b>Kleur, logo, font, footer — per agency instelbaar</div>
+          <div><b>Variabele invoer</b>Klantnaam, periode, KPI's auto-ingevuld</div>
+          <div><b>Versie-historie</b>Elk rapport bewaard met audit-log</div>
+          <div><b>Per-klant MRR</b>Subscriptions + addons + credits in één meter</div>
+          <div><b>Stripe-flows</b>Dunning, kortingen, trial-onboarding</div>
+          <div><b>PDF-factuur</b>Maandelijks in jouw branding, voor de klant</div>
+        </div>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/fullscreen-reports.png" alt="Fullscreen Rapporten view met MRR widget" />
+      </div>
+    </div>
+
+    <!-- 05 · Platform & admin -->
+    <div class="feature-row" id="platform">
+      <div class="feature-row__copy">
+        <span class="step">05 · Platform & admin</span>
+        <h2 class="h3">White-label, integraties en multi-agency oversight.</h2>
+        <p>
+          Custom domein, jouw merk, jouw kleuren — de klant ziet nooit het achterliggende
+          platform. Integraties met Meta, Google, Shopify, Klaviyo, Gorgias, Stripe en
+          Slack zijn out-of-the-box. Voor jou als operator: een admin-view over alle
+          agencies en klanten onder jouw account.
+        </p>
+        <div class="feat-cols">
+          <div><b>White-label domein</b>CNAME-only setup, klant ziet jouw merk</div>
+          <div><b>Theming</b>Volledig: kleuren, logo, favicon, e-mailtemplates</div>
+          <div><b>7 integraties</b>Meta, Google, Shopify, Klaviyo, Gorgias, Stripe, Slack</div>
+          <div><b>Health-checks</b>Per-integratie status met Slack-alerts</div>
+          <div><b>Multi-agency admin</b>MRR + churn + queue-belasting per agency</div>
+          <div><b>Impersonatie</b>Eén-klik inloggen als specifieke agency-operator</div>
+        </div>
+        <p style="margin-top:18px;"><a href="contact.html" class="btn btn--solid">Plan een afspraak →</a></p>
+      </div>
+      <div class="feature-row__visual">
+        <img src="assets/images/real-portal-studio.png" alt="Admin paneel op Studio Display — multi-agency oversight" />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───── UGC video ───── -->
+<section class="ugc">
+  <div class="container">
+    <span class="kicker kicker--center">In actie</span>
+    <h2 class="h2 h2--center">Een dag in een Agency Dashboard.</h2>
+    <p class="lede lede--center" style="color:var(--ink-soft);">
+      Korte cinematic shot: agency-operator in het portaal — van inbox naar deliverable.
+    </p>
+    <div class="ugc__player">
+      <video src="assets/videos/willoe-ugc.mp4" autoplay loop muted playsinline poster="assets/images/willoe-ugc-poster.jpg"></video>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div>
+      <span class="brand">
+        <span class="brand__dot"></span>
+        <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+      </span>
+      <p class="foot__line">Het besturingssysteem voor moderne ecom-businesses.</p>
+    </div>
+    <div class="foot__cols">
+      <div><h5>Product</h5>
+        <a href="livoa.html">Ecom Dashboard</a>
+        <a href="willoe.html">Agency Dashboard</a>
+        <a href="agents.html">AI Agents</a>
+      </div>
+      <div><h5>Juridisch</h5>
+        <a href="privacy.html">Privacybeleid</a>
+        <a href="terms.html">Algemene voorwaarden</a>
+        <a href="cookies.html">Cookies</a>
+      </div>
+      <div><h5>Bedrijf</h5>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html">Plan demo</a>
+        <a href="contact.html">via Calendly</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot__bottom">© 2026 Willoe AI · Gebouwd in NL</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(()=>{}) : e.target.pause()), { threshold: 0.25 });
+  document.querySelectorAll('video').forEach(v => io.observe(v));
+</script>
+</body>
+</html>

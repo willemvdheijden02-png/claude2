@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AI Agents — 8 specialisten in één chat · Willoe AI</title>
+<meta name="description" content="Acht AI-agents die elke dag werk uit handen nemen. Marketing, creative, SEO, analytics, research, service, CRM, automatie." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/shared.css" />
+<style>
+  .page-hero { padding: 64px 0 32px; text-align: center; }
+  .page-hero .display { max-width: 1000px; margin: 0 auto 20px; }
+  .page-hero .lede { margin: 0 auto 32px; }
+  .page-hero__visual {
+    max-width: 1100px; margin: 56px auto 0;
+    border-radius: 28px; overflow: hidden;
+    box-shadow: 0 60px 120px -40px rgba(26,26,26,.45);
+  }
+  .page-hero__visual img { width: 100%; display: block; }
+
+  .agents-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+  }
+  .agent-card {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 32px 30px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--line-soft);
+    transition: transform .25s ease, box-shadow .25s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .agent-card::before {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(120deg, var(--accent-tint, rgba(10,143,79,.06)) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .agent-card:hover { transform: translateY(-4px); }
+  .agent-card__head {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+  }
+  .agent-card__icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: grid; place-items: center; font-size: 26px;
+    background: var(--accent-bg, var(--emerald-soft));
+    color: var(--accent-color, var(--emerald));
+    font-weight: 700;
+    flex: 0 0 auto;
+  }
+  .agent-card__head h2 {
+    font-family: var(--serif); font-weight: 500; margin: 0;
+    font-size: 26px; letter-spacing: -.01em;
+  }
+  .agent-card__head .tag {
+    font-size: 12px; color: var(--ink-mute);
+    letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
+    margin-top: 4px; display: block;
+  }
+  .agent-card__lede { color: var(--ink-soft); margin: 0 0 18px; }
+  .agent-card ul {
+    list-style: none; padding: 0; margin: 0;
+  }
+  .agent-card ul li {
+    display: flex; gap: 10px; padding: 6px 0;
+    color: var(--ink-soft); font-size: 15px;
+  }
+  .agent-card ul li::before {
+    content: ""; flex: 0 0 6px; height: 6px; border-radius: 999px;
+    background: var(--accent-color, var(--emerald)); margin-top: 8px;
+  }
+  .agent-card .triggers {
+    margin-top: 18px; padding-top: 14px;
+    border-top: 1px solid var(--line);
+    font-size: 13px; color: var(--ink-mute);
+  }
+  .agent-card .triggers code {
+    background: var(--accent-tint, rgba(52,211,153,.10)); color: var(--accent-color, var(--emerald));
+    padding: 2px 8px; border-radius: 6px; font-family: ui-monospace, monospace;
+    font-size: 12px; margin: 0 4px 4px 0; display: inline-block;
+  }
+
+  /* Per-agent accent themes */
+  .agent-card.marketing { --accent-bg:rgba(231,144,80,.14); --accent-color:#F4A574; --accent-tint:rgba(244,165,116,.08); }
+  .agent-card.creative  { --accent-bg:rgba(140,124,255,.16); --accent-color:#A89DFF; --accent-tint:rgba(168,157,255,.08); }
+  .agent-card.seo       { --accent-bg:rgba(231,103,70,.16); --accent-color:#F08866; --accent-tint:rgba(240,136,102,.08); }
+  .agent-card.analytics { --accent-bg:rgba(80,150,220,.16); --accent-color:#7DB6E8; --accent-tint:rgba(125,182,232,.08); }
+  .agent-card.research  { --accent-bg:rgba(220,170,70,.16); --accent-color:#E8C77B; --accent-tint:rgba(232,199,123,.08); }
+  .agent-card.service   { --accent-bg:rgba(52,211,153,.16); --accent-color:#5EE0B5; --accent-tint:rgba(94,224,181,.08); }
+  .agent-card.crm       { --accent-bg:rgba(110,140,250,.16); --accent-color:#92ADFF; --accent-tint:rgba(146,173,255,.08); }
+  .agent-card.automation{ --accent-bg:rgba(224,123,90,.18); --accent-color:#F0916F; --accent-tint:rgba(240,145,111,.08); }
+
+  .ugc {
+    background: var(--bg-elev); color: var(--ink);
+    padding: clamp(80px, 10vw, 140px) 0; text-align: center;
+  }
+  .ugc .h2 { color: var(--ink); }
+  .ugc .kicker { color: var(--ink-mute); }
+  .ugc__player {
+    max-width: 1100px; margin: 48px auto 0;
+    border-radius: 28px; overflow: hidden;
+    box-shadow: 0 60px 120px -40px rgba(0,0,0,.7);
+  }
+  .ugc__player video { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+
+  .demo {
+    padding: clamp(64px, 8vw, 112px) 0;
+    background: var(--bg-warm);
+  }
+  .demo__chat {
+    max-width: 720px; margin: 48px auto 0;
+    background: var(--bg-elev); color: var(--ink);
+    border-radius: 18px; padding: 0;
+    box-shadow: 0 60px 120px -30px rgba(0,0,0,.6);
+    overflow: hidden;
+  }
+  .demo__chat__bar {
+    background: #1A1A1D; padding: 12px 16px;
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: rgba(255,255,255,.7);
+  }
+  .demo__chat__bar span {
+    width: 11px; height: 11px; border-radius: 999px; background: #3A3A3F;
+  }
+  .demo__chat__bar span:nth-child(1) { background: #FF5F57; }
+  .demo__chat__bar span:nth-child(2) { background: #FEBC2E; }
+  .demo__chat__bar span:nth-child(3) { background: #28C840; }
+  .demo__chat__body { padding: 24px 28px 28px; line-height: 1.6; }
+  .demo__chat__body p { margin: 0 0 14px; }
+  .demo__chat__body .user {
+    color: var(--ink-mute);
+    border-left: 2px solid var(--line);
+    padding-left: 12px; margin-bottom: 18px;
+  }
+  .demo__chat__body strong { color: var(--ink); }
+  .demo__chat__body .bullet { color: var(--ink-soft); }
+  .demo__chat__body .bullet::before { content: "• "; color: var(--accent); margin-right: 4px; }
+
+  @media (max-width: 980px) {
+    .agents-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__dot"></span>
+      <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html">Welkom</a>
+      <a href="livoa.html">Ecom Dashboard</a>
+      <a href="willoe.html">Agency Dashboard</a>
+      <a href="agents.html" class="is-active">AI Agents</a>
+      <a href="contact.html">Afspraak</a>
+    </nav>
+    <a href="contact.html" class="btn btn--solid">Plan een demo →</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ───── HERO ───── -->
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow__dot"></span> AI Agents · 8 specialisten</span>
+    <h1 class="display">Acht <em>specialisten</em>. Eén chat.</h1>
+    <p class="lede lede--center">
+      Vraag een marketing-strategie. Vraag een SEO audit. Vraag een concurrent-rapport.
+      Vraag een win-back flow. Acht agents staan klaar — getraind op jouw merk en
+      jouw doelgroep van 40-65+.
+    </p>
+    <div class="page-hero__visual">
+      <img src="assets/images/3d-agents-imac.png" alt="AI Agents op iMac" />
+    </div>
+  </div>
+</section>
+
+<!-- ───── AGENTS GRID ───── -->
+<section style="padding:32px 0 80px;">
+  <div class="agents-grid">
+
+    <article class="agent-card marketing">
+      <div class="agent-card__head">
+        <div class="agent-card__icon">🎯</div>
+        <div>
+          <h2>Marketing Agent</h2>
+          <span class="tag">Strategy · Ads · Copy</span>
+        </div>
+      </div>
+      <p class="agent-card__lede">
+        Je strateeg voor paid en organic. Schrijft copy in 3 varianten, plant campagnes
+        en verdeelt budget tussen Meta, Google en TikTok.
+      </p>
+      <ul>
+        <li>Meta + Google Ads campagnes plannen en uitwerken</li>
+        <li>Ad copy in 3 varianten (Story / Problem-Solution / Offer)</li>
+        <li>Budget allocatie volgens 70/20/10 of 3x Kill Rule</li>
+        <li>Wekelijkse performance analyses + actiepunten</li>
+      </ul>
+      <div class="triggers">
+        Triggers: <code>/ads-plan</code> <code>/ad-creative</code> <code>/paid-ads</code> <code>/kpi-check</code>
+      </div>
+    </article>
+
+    <article class="agent-card creative">
+      <div class="agent-card__head">
+        <div class="agent-card__icon">🎨</div>
+        <div>
+          <h2>Creative Agent</h2>
+          <span class="tag">Scripts · Hooks · Briefs</span>
+        </div>
+      </div>
+      <p class="agent-card__lede">
+        Plak een concurrent-URL, krijg een complete creatieve brief — scripts, hooks,
+        foto-ideeën en copy, getuned op vrouwen 40-65+.
+      </p>
+      <ul>
+        <li>Concurrent-product analyseren en hoeken extraheren</li>
+        <li>Scripts schrijven volgens Hook-Pain-Proof-CTA framework</li>
+        <li>Voiceover prompts genereren voor ElevenLabs</li>
+        <li>Format-advies per variant: statisch / video / carousel</li>
+      </ul>
+      <div class="triggers">
+        Triggers: <code>/ads-create</code> <code>/creative-strategy</code> <code>/static-remix</code> <code>/my-facebook-ad</code>
+      </div>
+    </article>
+
+    <article class="agent-card seo">
+      <div class="agent-card__head">
+        <div class="agent-card__icon">🔍</div>
+        <div>
+          <h2>SEO Agent</h2>
+          <span class="tag">Audits · Content · GEO</span>
+        </div>
+      </div>
+      <p class="agent-card__lede">
+        Volledige SEO-cyclus met Google data eronder. Audits, technische checks,
+        content briefs en AI-search optimalisatie in één agent.
+      </p>
+      <ul>
+        <li>Technical audits via Search Console, PageSpeed, CrUX</li>
+        <li>Keyword clustering met SERP overlap methodologie</li>
+        <li>Content briefs met E-E-A-T signalen ingebouwd</li>
+        <li>GEO / AI-search optimalisatie voor ChatGPT en Perplexity</li>
+      </ul>
+      <div class="triggers">
+        Triggers: <code>/seo-audit</code> <code>/seo-content</code> <code>/seo-technical</code> <code>/seo-geo</code>
+      </div>
+    </article>
+
+    <article class="agent-card analytics">
+      <div class="agent-card__head">
+        <div class="agent-card__icon">📊</div>
+        <div>
+          <h2>Analytics Agent</h2>
+          <span class="tag">CPA · ROAS · Trends</span>
+        </div>
+      </div>
+      <p class="agent-card__lede">
+        Detecteert anomalies, breekt CPA-spikes uit naar oorzaak, en vergelijkt
+        attributiemodellen — voordat jij koffie hebt.
+      </p>
+      <ul>
+        <li>Wekelijkse anomaly detection met early-warning alerts</li>
+        <li>CPA-diagnostics: welke campagne, welke ad, welke audience</li>
+        <li>Attribution-vergelijking: last click vs. data-driven vs. linear</li>
+        <li>Forecasting voor 30, 60, 90 dagen op huidige trends</li>
+      </ul>
+      <div class="triggers">
+        Triggers: <code>/01-cpa-diagnostics</code> <code>/06-anomaly-detection</code> <code>/26-attribution</code>
+      </div>
+    </article>
+
+    <article class="agent-card research">
+      <div class="agent-card__head">
+        <div class="agent-card__icon">🔬</div>
+        <div>
+          <h2>Research Agent</h2>
+          <span class="tag">Concurrent · Trend · Product</span>
+        </div>
+      </div>
+      <p class="agent-card__lede">
+        Scant je concurrenten dagelijks. Vindt trends 4-8 weken voordat ze op Meta
+        landen. Valideert nieuwe productideeën met data.
+      </p>
+      <ul>
+        <li>Dagelijkse concurrent-scan in Meta Ads Library (NL/BE/DE/GB/VS)</li>
+        <li>Trend monitoring op Pinterest en TikTok</li>
+        <li>Product research voor BH/lingerie en slaapkussens</li>
+        <li>Maandelijkse strategic-focus rapporten</li>
+      </ul>
+      <div class="triggers">
+        Triggers: <code>/concurrent-research</code> <code>/livoa-trend</code> <code>/livoa-product</code>
+      </div>
+    </article>
+
+    <article class="agent-card service">
+      <div class="agent-card__head">
+        <div class="agent-card__icon">💬</div>
+        <div>
+          <h2>Service Agent</h2>
+          <span class="tag">Klanten · Gorgias · NL+DE</span>
+        </div>
+      </div>
+      <p class="agent-card__lede">
+        Klaar-om-te-versturen klantenservice emails in NL en DE. Order updates,
+        retouren, maatadvies — direct in Gorgias als ticket.
+      </p>
+      <ul>
+        <li>Email-drafts in Nederlands en Duits voor Livoa + Livoastore</li>
+        <li>Order-status updates en shipping issues</li>
+        <li>Direct tickets aanmaken in Gorgias via API</li>
+        <li>Fallback naar Gmail draft als Gorgias offline is</li>
+      </ul>
+      <div class="triggers">
+        Triggers: <code>/customer-service-email</code> <code>/customer-service-order-status</code>
+      </div>
+    </article>
+
+    <article class="agent-card crm">
+      <div class="agent-card__head">
+        <div class="agent-card__icon">📇</div>
+        <div>
+          <h2>CRM Agent</h2>
+          <span class="tag">Leads · Pipeline · Klaviyo</span>
+        </div>
+      </div>
+      <p class="agent-card__lede">
+        Beheert je pipeline en e-mail-flows. Voegt leads toe, update status, bouwt
+        Klaviyo flows voor welkomst, win-back en post-purchase.
+      </p>
+      <ul>
+        <li>Pipeline overzicht met volgende acties per lead</li>
+        <li>Klaviyo flows bouwen: welkom, win-back, verjaardag, post-purchase</li>
+        <li>Segment-strategie en list-hygiene per kwartaal</li>
+        <li>B2B cold email sequences die replies krijgen</li>
+      </ul>
+      <div class="triggers">
+        Triggers: <code>/crm</code> <code>/email-sequence</code> <code>/cold-email</code> <code>/36-email-sequence-writer</code>
+      </div>
+    </article>
+
+    <article class="agent-card automation">
+      <div class="agent-card__head">
+        <div class="agent-card__icon">⚡</div>
+        <div>
+          <h2>Automatie Agent</h2>
+          <span class="tag">Workflows · Hooks · Schedule</span>
+        </div>
+      </div>
+      <p class="agent-card__lede">
+        Automatiseert de saaie dingen: wekelijks rapport om maandag 08:00, KPI-check
+        elke ochtend, concurrent-rapport elke vrijdag. Allemaal op cron.
+      </p>
+      <ul>
+        <li>Scheduled tasks via cron (dagelijks / wekelijks / maandelijks)</li>
+        <li>Webhook-flows die meerdere tools aan elkaar koppelen</li>
+        <li>Auto-rapportage met PDF-export en e-mail-delivery</li>
+        <li>Hooks die in Claude Code automatisch acties triggeren</li>
+      </ul>
+      <div class="triggers">
+        Triggers: <code>/loop</code> <code>/schedule</code> <code>/wekelijks-rapport</code> <code>/maand-rapport</code>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ───── UGC video ───── -->
+<section class="ugc">
+  <div class="container">
+    <span class="kicker kicker--center">In actie</span>
+    <h2 class="h2 h2--center">Een agent in gesprek.</h2>
+    <p class="lede lede--center" style="color:var(--ink-soft);">
+      Korte cinematic shot: handen typen op een MacBook, de chat antwoordt met scherpe bullet points.
+    </p>
+    <div class="ugc__player">
+      <video src="assets/videos/agents-ugc.mp4" autoplay loop muted playsinline poster="assets/images/agents-ugc-poster.jpg"></video>
+    </div>
+  </div>
+</section>
+
+<!-- ───── Demo chat ───── -->
+<section class="demo">
+  <div class="container" style="text-align:center;">
+    <span class="kicker">Voorbeeld-conversatie</span>
+    <h2 class="h2">Hoe het voelt om met een agent te werken.</h2>
+    <p class="lede lede--center">
+      Geen prompt-engineering. Geen API-keys. Gewoon: vraag stellen, antwoord krijgen.
+    </p>
+    <div class="demo__chat">
+      <div class="demo__chat__bar"><span></span><span></span><span></span><span style="background:transparent;color:rgba(255,255,255,.7);margin-left:12px;width:auto;height:auto;">Marketing Agent</span></div>
+      <div class="demo__chat__body">
+        <p class="user">Wat moeten we doen met de Best Life concurrent die gisteren een nieuwe video-ad lanceerde voor €49?</p>
+        <p><strong>Antwoord, in 3 punten:</strong></p>
+        <p class="bullet">Hun nieuwe hook gebruikt "wakker zonder nekpijn" — dat is een hoek die we nog niet hebben getest. Maak 3 varianten met deze claim, format video 9:16.</p>
+        <p class="bullet">Hun €49 prijs is €20 onder onze huidige bestseller. Niet zakken — maar wel een 60-nachten-proef sticker toevoegen aan onze cards.</p>
+        <p class="bullet">Ik zie dat Best Life dezelfde landingspagina gebruikt voor desktop en mobile. Onze mobile CVR is 2.3× hoger dan desktop — daar zit ruimte voor scaling. Verhoog mobile budget +25%.</p>
+        <p style="margin-top:20px;color:rgba(255,255,255,.55);font-size:14px;">Wil je dat ik de 3 ad-varianten nu uitwerk?</p>
+      </div>
+    </div>
+    <div style="margin-top:48px;">
+      <a href="contact.html" class="btn btn--solid btn--lg">Probeer het zelf →</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div>
+      <span class="brand">
+        <span class="brand__dot"></span>
+        <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+      </span>
+      <p class="foot__line">Het besturingssysteem voor ecom-businesses en agencies.</p>
+    </div>
+    <div class="foot__cols">
+      <div><h5>Product</h5>
+        <a href="livoa.html">Ecom Dashboard</a>
+        <a href="willoe.html">Agency Dashboard</a>
+        <a href="agents.html">AI Agents</a>
+      </div>
+      <div><h5>Juridisch</h5>
+        <a href="privacy.html">Privacybeleid</a>
+        <a href="terms.html">Algemene voorwaarden</a>
+        <a href="cookies.html">Cookies</a>
+      </div>
+      <div><h5>Bedrijf</h5>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html">Plan demo</a>
+        <a href="contact.html">via Calendly</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot__bottom">© 2026 Willoe AI · Gebouwd in NL</div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(()=>{}) : e.target.pause()), { threshold: 0.25 });
+  document.querySelectorAll('video').forEach(v => io.observe(v));
+</script>
+</body>
+</html>

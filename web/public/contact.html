@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Plan een afspraak · Willoe AI</title>
+<meta name="description" content="Plan 1 uur. Je krijgt het volledige document en de repo-key om alles direct zelf te downloaden en in te zien." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/shared.css" />
+<style>
+  .page-hero { padding: 80px 0 32px; text-align: center; }
+  .page-hero .display { max-width: 980px; margin: 0 auto 16px; }
+  .page-hero .lede   { margin: 0 auto 8px; }
+
+  .booking {
+    padding: clamp(40px, 6vw, 80px) 0;
+  }
+  .booking__grid {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+    display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px;
+    align-items: start;
+  }
+  .booking__left ul {
+    list-style: none; padding: 0; margin: 24px 0 0;
+  }
+  .booking__left ul li {
+    display: flex; gap: 14px; padding: 14px 0;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--ink-soft); font-size: 15.5px;
+  }
+  .booking__left ul li b {
+    display: block; color: var(--ink); font-weight: 600; margin-bottom: 2px;
+  }
+  .booking__left ul li .ic {
+    flex: 0 0 36px; height: 36px; border-radius: 10px;
+    background: var(--emerald-soft); color: var(--emerald);
+    display: grid; place-items: center; font-size: 18px; font-weight: 700;
+    margin-top: 2px;
+  }
+  .booking__dream {
+    margin-top: 36px; padding: 26px 28px;
+    background: linear-gradient(135deg, rgba(224,123,90,.10), rgba(201,100,66,.06));
+    border: 1px solid rgba(224,123,90,.18);
+    border-radius: 18px;
+  }
+  .booking__dream .kicker { color: var(--accent); display: block; }
+  .booking__dream p { margin: 0; color: var(--ink-soft); font-size: 15.5px; line-height: 1.6; }
+
+  /* Card form */
+  .form {
+    background: var(--card);
+    border-radius: 24px;
+    padding: 32px 32px 28px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--line-soft);
+  }
+  .form--calendly { padding: 24px 18px 12px; }
+  .form--calendly .calendly-inline-widget {
+    border-radius: 14px; overflow: hidden;
+    margin-top: 14px;
+  }
+  .form h2 {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 26px; margin: 0 0 6px; letter-spacing: -.01em;
+  }
+  .form .sub { color: var(--ink-mute); font-size: 14.5px; margin: 0 0 24px; }
+  .form label { display: block; font-weight: 600; font-size: 14px; margin: 16px 0 6px; }
+  .form input, .form select, .form textarea {
+    width: 100%; padding: 12px 14px; font-size: 15px;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: var(--bg-elev); color: var(--ink);
+    outline: 0; transition: border-color .15s ease, background .15s ease;
+    font-family: inherit;
+  }
+  .form input:focus, .form select:focus, .form textarea:focus {
+    border-color: var(--accent); background: var(--bg);
+  }
+  .form textarea { min-height: 90px; resize: vertical; }
+  .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form__times {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px;
+  }
+  .form__times button {
+    padding: 10px 12px; font-size: 14px; font-weight: 600;
+    background: var(--bg-elev); border: 1px solid var(--line); border-radius: 10px;
+    cursor: pointer; transition: all .15s ease;
+  }
+  .form__times button.is-on, .form__times button:hover {
+    background: var(--accent); color: #fff; border-color: var(--accent);
+  }
+  .form .btn { width: 100%; justify-content: center; margin-top: 24px; }
+  .form__thanks {
+    display: none; padding: 18px 20px;
+    background: var(--emerald-soft); color: var(--emerald);
+    border-radius: 12px; margin-top: 18px;
+    font-weight: 600;
+  }
+  .form__thanks.is-on { display: block; }
+
+  .pricing {
+    background: var(--bg-soft); padding: clamp(64px, 8vw, 112px) 0;
+  }
+  .pricing__grid {
+    max-width: 1100px; margin: 48px auto 0; padding: 0 32px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+  }
+  .price-card {
+    background: var(--card); border-radius: 22px;
+    padding: 28px 26px; border: 1px solid var(--line-soft);
+    box-shadow: var(--card-shadow);
+  }
+  .price-card.featured {
+    background: linear-gradient(180deg, #1F1F22, #16161A); color: var(--ink); border: 1px solid var(--accent);
+    transform: scale(1.03);
+  }
+  .price-card.featured h3 { color: var(--ink); }
+  .price-card.featured p, .price-card.featured ul { color: rgba(255,255,255,.7); }
+  .price-card h3 {
+    font-family: var(--serif); font-weight: 500;
+    margin: 0 0 6px; font-size: 22px; letter-spacing: -.01em;
+  }
+  .price-card .price {
+    font-family: var(--serif); font-weight: 400;
+    font-size: 42px; margin: 12px 0 4px; line-height: 1;
+  }
+  .price-card .price small { font-size: 14px; color: var(--ink-mute); font-weight: 600; font-family: var(--sans); margin-left: 6px; }
+  .price-card.featured .price small { color: rgba(255,255,255,.6); }
+  .price-card .sub { color: var(--ink-mute); font-size: 14px; margin: 0 0 16px; }
+  .price-card.featured .sub { color: rgba(255,255,255,.6); }
+  .price-card ul { padding: 0; list-style: none; margin: 18px 0 24px; }
+  .price-card ul li {
+    padding: 8px 0; border-top: 1px solid var(--line);
+    font-size: 14.5px; color: var(--ink-soft);
+  }
+  .price-card.featured ul li { border-color: rgba(255,255,255,.10); color: rgba(255,255,255,.8); }
+  .price-card .btn { width: 100%; justify-content: center; }
+  .price-card.featured .btn--solid { background: var(--accent); }
+  .price-card.featured .btn--solid:hover { background: var(--accent-deep); }
+
+  .faq { padding: clamp(64px, 8vw, 112px) 0; }
+  .faq__list { max-width: 820px; margin: 32px auto 0; padding: 0 32px; }
+  .faq details {
+    border-top: 1px solid var(--line);
+    padding: 18px 0;
+  }
+  .faq details:last-child { border-bottom: 1px solid var(--line); }
+  .faq summary {
+    font-family: var(--serif); font-weight: 500;
+    font-size: 19px; cursor: pointer; list-style: none;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .faq summary::after {
+    content: "+"; font-size: 24px; color: var(--ink-mute);
+    transition: transform .2s ease;
+  }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { margin: 12px 0 0; color: var(--ink-soft); }
+
+  @media (max-width: 980px) {
+    .booking__grid, .pricing__grid { grid-template-columns: 1fr; }
+    .price-card.featured { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__dot"></span>
+      <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html">Welkom</a>
+      <a href="livoa.html">Ecom Dashboard</a>
+      <a href="willoe.html">Agency Dashboard</a>
+      <a href="agents.html">AI Agents</a>
+      <a href="contact.html" class="is-active">Afspraak</a>
+    </nav>
+    <a href="#book" class="btn btn--solid">Plan demo →</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ───── PAGE HERO ───── -->
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow"><span class="eyebrow__dot"></span> Plan een afspraak</span>
+    <h1 class="display">1 uur. <em>Volledige toegang</em> tot het systeem.</h1>
+    <p class="lede lede--center">
+      Een uur waarin we beide dashboards doorlopen en jouw use-case bespreken.
+      Na afloop krijg je het volledige document én de repo-key — zo download je
+      alles direct zelf en kun je het systeem in eigen tempo doorlopen.
+    </p>
+  </div>
+</section>
+
+<!-- ───── BOOKING ───── -->
+<section class="booking" id="book">
+  <div class="booking__grid">
+    <div class="booking__left">
+      <h2 class="h2">Wat krijg je na dit uur?</h2>
+      <ul>
+        <li>
+          <span class="ic">1</span>
+          <div><b>Ecom Dashboard + Agency Dashboard</b>Beide platforms — geen live tour, maar de echte builds om zelf te draaien voor je merk én je agency-klanten.</div>
+        </li>
+        <li>
+          <span class="ic">2</span>
+          <div><b>Onboarding-document voor de bot</b>Een korte uitwerking van precies wat je aanlevert om de AI binnen 1 dag te trainen op jouw merk, doelgroep en stem.</div>
+        </li>
+        <li>
+          <span class="ic">3</span>
+          <div><b>Integraties dashboard met API-keys</b>Klaviyo, Meta, Google Ads, Shopify, Gorgias, Stripe — pre-gevuld en klaar voor jouw accounts.</div>
+        </li>
+        <li>
+          <span class="ic">4</span>
+          <div><b>Repo-key voor self-host</b>Volledige toegang tot de repo zodat alles lokaal of op je eigen server kan draaien — geen vendor lock-in.</div>
+        </li>
+      </ul>
+
+      <div class="booking__dream">
+        <span class="kicker" style="margin-bottom:8px;">Dream outcome</span>
+        <p>
+          Stel je morgen open je laptop en beide dashboards staan klaar.
+          De AI kent je merk al — je vraagt om een wekelijkse rapportage en die ligt
+          binnen 30 seconden in je inbox, in jouw branding. Geen tools meer openen.
+          Geen rapporten meer schrijven. Geen agency-tasks meer kopiëren tussen 7 apps.
+          Eén systeem, jouw merk, jouw tempo.
+        </p>
+      </div>
+    </div>
+
+    <aside class="form form--calendly">
+      <h2>Plan je sessie</h2>
+      <p class="sub">Gratis, 1 uur, via Google Meet. Dashboards, onboarding-document, integraties en repo-key sturen we direct na afloop. Kies hieronder een tijdslot dat jou past.</p>
+
+      <!-- Calendly inline widget -->
+      <div class="calendly-inline-widget"
+           data-url="https://calendly.com/willemvdheijden02/ai-meeting?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=161619&text_color=f2f1ed&primary_color=e07b5a"
+           style="min-width:320px;height:680px;"></div>
+      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+      
+    </aside>
+  </div>
+</section>
+
+<!-- ───── PRICING (preview) ───── -->
+<section class="pricing">
+  <div class="container" style="text-align:center;">
+    <span class="kicker kicker--center">Prijzen, alleen voor context</span>
+    <h2 class="h2 h2--center">Geen verrassingen.</h2>
+    <p class="lede lede--center">Drie tiers. Maandelijks opzegbaar. Eerste 30 dagen geld-terug-garantie.</p>
+    <div class="pricing__grid">
+
+      <div class="price-card">
+        <h3>Solo</h3>
+        <p class="sub">Voor founders en solo-operators</p>
+        <div class="price">€149<small>/maand</small></div>
+        <ul>
+          <li>Ecom Dashboard, alle modules</li>
+          <li>8 AI agents inclusief</li>
+          <li>1 brand-workspace</li>
+          <li>500 agent-runs / maand</li>
+          <li>E-mail support</li>
+        </ul>
+        <a href="#book" class="btn btn--ghost">Kies Solo →</a>
+      </div>
+
+      <div class="price-card featured">
+        <h3>Pro</h3>
+        <p class="sub">Voor in-house teams en small agencies</p>
+        <div class="price">€349<small>/maand</small></div>
+        <ul>
+          <li>Alles van Solo</li>
+          <li>+ Agency Dashboard</li>
+          <li>5 client-workspaces</li>
+          <li>2.500 agent-runs / maand</li>
+          <li>Slack-support, dagelijkse priority</li>
+        </ul>
+        <a href="#book" class="btn btn--solid">Kies Pro →</a>
+      </div>
+
+      <div class="price-card">
+        <h3>Agency</h3>
+        <p class="sub">Voor bureaus met meerdere klanten</p>
+        <div class="price">€749<small>/maand</small></div>
+        <ul>
+          <li>Alles van Pro</li>
+          <li>White-label domein + branding</li>
+          <li>Onbeperkt client-workspaces</li>
+          <li>10.000 agent-runs / maand</li>
+          <li>Dedicated success-manager</li>
+        </ul>
+        <a href="#book" class="btn btn--ghost">Kies Agency →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───── FAQ ───── -->
+<section class="faq">
+  <div class="container" style="text-align:center;">
+    <span class="kicker kicker--center">Veelgestelde vragen</span>
+    <h2 class="h2 h2--center">Wat je verder wil weten.</h2>
+  </div>
+  <div class="faq__list">
+    <details>
+      <summary>Hoe lang duurt de onboarding?</summary>
+      <p>Onder 24 uur. Je krijgt na de demo een magic-link, koppelt Meta + Shopify, en het dashboard staat klaar. De eerste KPI-sync draait binnen 10 minuten.</p>
+    </details>
+    <details>
+      <summary>Werkt het ook voor B2B?</summary>
+      <p>Ja. De AI agents zijn getuned voor DTC (specifiek 40-65+ vrouwen), maar de Marketing-, Analytics- en CRM-agents werken voor B2B ook. Bij de demo bespreken we welke modules voor jou waarde toevoegen.</p>
+    </details>
+    <details>
+      <summary>Wat als ik geen Meta Ads draai?</summary>
+      <p>Geen probleem. Livoa werkt prima zonder Meta — de SEO, Klaviyo, Gorgias en research-modules zijn volledig onafhankelijk. De KPI-sync past zich aan op de tools die je wél gebruikt.</p>
+    </details>
+    <details>
+      <summary>Kan ik mijn eigen agents toevoegen?</summary>
+      <p>Op Pro en Agency tier: ja. Je kunt extra skills/agents toevoegen via custom skill files (Claude Code skill format) of via een YAML config in het dashboard.</p>
+    </details>
+    <details>
+      <summary>Is mijn data veilig?</summary>
+      <p>Alle data blijft in je eigen workspace. We hosten op AWS in Frankfurt, encryptie in transit en at rest, en je kunt op elk moment een data-export of -wissing aanvragen. Volledig GDPR-compliant.</p>
+    </details>
+    <details>
+      <summary>Kan ik opzeggen wanneer ik wil?</summary>
+      <p>Ja, maandelijks. De eerste 30 dagen krijg je 100% terug, geen vragen. Daarna is opzeggen één klik in je billing-tab.</p>
+    </details>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div>
+      <span class="brand">
+        <span class="brand__dot"></span>
+        <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+      </span>
+      <p class="foot__line">Het besturingssysteem voor ecom-businesses en agencies.</p>
+    </div>
+    <div class="foot__cols">
+      <div><h5>Product</h5>
+        <a href="livoa.html">Ecom Dashboard</a>
+        <a href="willoe.html">Agency Dashboard</a>
+        <a href="agents.html">AI Agents</a>
+      </div>
+      <div><h5>Juridisch</h5>
+        <a href="privacy.html">Privacybeleid</a>
+        <a href="terms.html">Algemene voorwaarden</a>
+        <a href="cookies.html">Cookies</a>
+      </div>
+      <div><h5>Bedrijf</h5>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html">Plan demo</a>
+        <a href="contact.html">via Calendly</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot__bottom">© 2026 Willoe AI · Gebouwd in NL</div>
+</footer>
+
+</body>
+</html>

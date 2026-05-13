@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Willoe AI — Het besturingssysteem voor ecom-businesses en agencies</title>
+<meta name="description" content="Twee dashboards. Eén missie: jouw team werkt sneller dan elk agency van 50 man. Ecom Dashboard + Agency Dashboard." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/shared.css" />
+<style>
+  /* Page-specific */
+  .hero { padding-top: 56px; }
+  .hero__inner {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+    display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px;
+    align-items: center;
+  }
+  .hero__copy { max-width: 640px; }
+  .hero__ctas { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+  .hero__meta {
+    list-style: none; padding: 0; margin: 40px 0 0;
+    display: flex; gap: 28px; flex-wrap: wrap; color: var(--ink-mute);
+    font-size: 14px;
+  }
+  .hero__meta strong { color: var(--ink); font-weight: 600; font-size: 18px; display: block; }
+  .hero__visual {
+    position: relative; aspect-ratio: 4/3;
+    border-radius: 28px; overflow: hidden;
+    box-shadow: 0 30px 80px -30px rgba(26,26,26,.35);
+  }
+  .hero__visual img,
+  .hero__visual video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero__rule { height: 1px; background: var(--line); margin: 96px auto 0; max-width: 1216px; }
+  .hero__strip {
+    max-width: 1280px; margin: 0 auto; padding: 22px 32px;
+    display: flex; align-items: center; gap: 24px;
+    color: var(--ink-mute); font-size: 14px;
+  }
+  .hero__strip .logos { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; }
+  .hero__strip .logos span { font-weight: 600; color: var(--ink-soft); }
+  .hero__strip .logos i { font-style: normal; color: var(--ink-mute); }
+
+  /* Dual product showcase */
+  .duo {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  }
+  .duo__card {
+    background: var(--card); border-radius: 28px;
+    border: 1px solid var(--line-soft);
+    padding: 36px 32px;
+    box-shadow: var(--card-shadow);
+    transition: transform .35s ease, box-shadow .35s ease;
+    text-decoration: none; color: inherit;
+    display: block;
+  }
+  .duo__card:hover { transform: translateY(-4px); box-shadow: 0 1px 0 rgba(26,26,26,.04), 0 40px 80px -20px rgba(26,26,26,.25); }
+  .duo__visual { border-radius: 16px; overflow: hidden; margin-bottom: 24px; aspect-ratio: 16/10; background: #0F0F11; }
+  .duo__visual img { width: 100%; height: 100%; object-fit: cover; }
+  .duo__card h2 { font-family: var(--serif); font-weight: 500; font-size: 30px; margin: 0 0 8px; letter-spacing: -.01em; }
+  .duo__card p  { color: var(--ink-soft); margin: 0 0 18px; }
+  .duo__cta { font-weight: 600; color: var(--accent); display: inline-flex; align-items: center; gap: 6px; }
+
+  /* Stat strip on dark */
+  .stats { background: var(--bg-elev); color: var(--ink); border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
+  .stats .h2 { color: var(--ink); text-align: center; }
+  .stats .kicker { color: var(--ink-mute); }
+  .stats__grid {
+    margin-top: 48px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+  }
+  .stats__grid > div {
+    padding: 28px 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--card);
+  }
+  .stats__grid strong {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(40px, 4.5vw, 60px); line-height: 1; display: block;
+    color: var(--accent);
+  }
+  .stats__grid span { display: block; margin-top: 8px; color: var(--ink-soft); font-size: 14px; }
+
+  /* CTA strip */
+  .cta { background: var(--bg-soft); }
+  .cta__inner { max-width: 760px; margin: 0 auto; padding: 0 32px; text-align: center; }
+  .cta .lede { margin: 0 auto 32px; }
+
+  @media (max-width: 980px) {
+    .hero__inner, .duo { grid-template-columns: 1fr; }
+    .stats__grid { grid-template-columns: repeat(2, 1fr); }
+    section[style*="grid-template-columns: 1fr 1fr 1fr"] > div { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav__inner">
+    <a href="index.html" class="brand">
+      <span class="brand__dot"></span>
+      <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+    </a>
+    <nav class="nav__links">
+      <a href="index.html" class="is-active">Welkom</a>
+      <a href="livoa.html">Ecom Dashboard</a>
+      <a href="willoe.html">Agency Dashboard</a>
+      <a href="agents.html">AI Agents</a>
+      <a href="contact.html">Afspraak</a>
+    </nav>
+    <a href="contact.html" class="btn btn--solid">Plan een demo →</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ───── HERO ───── -->
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__copy">
+      <span class="eyebrow"><span class="eyebrow__dot"></span> Nu in private beta</span>
+      <h1 class="display">
+        Het <em>besturings&shy;systeem</em> voor ecom-businesses & agencies.
+      </h1>
+      <p class="lede">
+        Twee dashboards. Eén missie: jouw team werkt sneller dan elk agency
+        van 50 man. AI-skills draaien op aanvraag, KPI's syncen live, en
+        klanten zien rapporten waar ze tien jaar terug nog voor moesten bellen.
+      </p>
+      <div class="hero__ctas">
+        <a href="contact.html" class="btn btn--solid btn--lg">Plan een afspraak →</a>
+        <a href="livoa.html" class="btn btn--ghost btn--lg">Bekijk Ecom</a>
+        <a href="willoe.html" class="btn btn--ghost btn--lg">Bekijk Agency</a>
+      </div>
+      <ul class="hero__meta">
+        <li><strong>2</strong> dashboards live</li>
+        <li><strong>8</strong> AI-agents</li>
+        <li><strong>12</strong> portal-modules</li>
+        <li><strong>4/5</strong> integraties</li>
+      </ul>
+    </div>
+
+    <div class="hero__visual">
+      <video autoplay loop muted playsinline poster="assets/images/ecom-coffee-poster.jpg" style="width:100%;height:100%;object-fit:cover;display:block;">
+        <source src="assets/videos/ecom-coffee-ugc.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
+
+  <div class="hero__rule"></div>
+  <div class="hero__strip">
+    <span>Gebouwd voor</span>
+    <span class="logos">
+      <span>Ad-agencies</span><i>·</i>
+      <span>DTC merken</span><i>·</i>
+      <span>Performance teams</span><i>·</i>
+      <span>Creators</span><i>·</i>
+      <span>Solo founders</span>
+    </span>
+  </div>
+</section>
+
+<!-- ───── DUO showcase ───── -->
+<section>
+  <div class="container" style="text-align:center; margin-bottom: 48px;">
+    <span class="kicker kicker--center">Twee dashboards</span>
+    <h2 class="h2 h2--center">Kies je hoofd&shy;ingang.</h2>
+    <p class="lede lede--center" style="text-align:center;">
+      Een ecom-cockpit voor je eigen merk en een gebrand portaal voor je agency-klanten.
+    </p>
+  </div>
+  <div class="duo">
+    <a class="duo__card" href="livoa.html">
+      <div class="duo__visual">
+        <img src="assets/images/lifestyle/duo-ecom.png" alt="Ecom-founder bekijkt haar dashboard 's avonds vanaf de bank" />
+      </div>
+      <h2>Ecom Dashboard</h2>
+      <p>De ecom-cockpit voor je eigen merk. KPI-sync, 8 AI-agents, concurrent monitor en research-engine — in 5 hoofdstukken uitgelegd.</p>
+      <span class="duo__cta">Bekijk feature-tour →</span>
+    </a>
+
+    <a class="duo__card" href="willoe.html">
+      <div class="duo__visual">
+        <img src="assets/images/lifestyle/duo-agency.png" alt="Agency-owner aan staande bureau met dashboard op MacBook" />
+      </div>
+      <h2>Agency Dashboard</h2>
+      <p>Het white-label portaal voor agencies. Klanten onboarden in 24u, service-catalogus, rapporten, facturatie en quota — alles in één meter.</p>
+      <span class="duo__cta">Bekijk feature-tour →</span>
+    </a>
+  </div>
+</section>
+
+<!-- ───── Fullscreen dual-dashboard videos ───── -->
+<section style="padding: clamp(64px, 8vw, 120px) 0; background: var(--bg);">
+  <div class="container" style="text-align:center; margin-bottom: 40px;">
+    <span class="kicker kicker--center">In actie</span>
+    <h2 class="h2 h2--center">Beide dashboards — in de hand van echte operators.</h2>
+    <p class="lede lede--center">
+      Twee cinematic shots: een ecom-founder die haar Ecom Dashboard checkt, en een agency-team
+      dat samen door het Agency Dashboard scrollt. Geen mock-ups — echte schermen, echte mensen.
+    </p>
+  </div>
+
+  <div style="max-width: 1280px; margin: 0 auto; padding: 0 32px;">
+    <figure style="margin: 0 0 28px; border-radius: 24px; overflow: hidden; border: 1px solid var(--line-soft); box-shadow: 0 60px 120px -40px rgba(0,0,0,.7);">
+      <video src="assets/videos/ecom-kitchen-ugc.mp4" autoplay loop muted playsinline poster="assets/images/ecom-kitchen-poster.jpg" style="width:100%; display:block; aspect-ratio:16/9; object-fit:cover; background:#000;"></video>
+      <figcaption style="background: var(--card); padding: 18px 24px; display:flex; justify-content:space-between; align-items:center; font-size:14px;">
+        <span><strong style="color:var(--ink);">Ecom Dashboard</strong> · KPI's, ads en research onder één login</span>
+        <a href="livoa.html" style="color:var(--accent); font-weight:600;">Bekijk tour →</a>
+      </figcaption>
+    </figure>
+
+    <figure style="margin: 0; border-radius: 24px; overflow: hidden; border: 1px solid var(--line-soft); box-shadow: 0 60px 120px -40px rgba(0,0,0,.7);">
+      <video src="assets/videos/agency-topdown-ugc.mp4" autoplay loop muted playsinline poster="assets/images/agency-topdown-poster.jpg" style="width:100%; display:block; aspect-ratio:16/9; object-fit:cover; background:#000;"></video>
+      <figcaption style="background: var(--card); padding: 18px 24px; display:flex; justify-content:space-between; align-items:center; font-size:14px;">
+        <span><strong style="color:var(--ink);">Agency Dashboard</strong> · klanten, queue, rapporten en billing in één portaal</span>
+        <a href="willoe.html" style="color:var(--accent); font-weight:600;">Bekijk tour →</a>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ───── UGC strip ───── -->
+<section style="background:var(--bg-elev); color:var(--ink); padding: clamp(80px,10vw,140px) 0; text-align:center;">
+  <div class="container">
+    <span class="kicker kicker--center" style="color:var(--ink-mute);">Het in actie</span>
+    <h2 class="h2 h2--center" style="color:#FFF;">Mensen aan het werk met het systeem.</h2>
+    <p class="lede lede--center" style="color:var(--ink-soft);">
+      Drie korte cinematic shots — een marketing-operator, een agency-owner en een AI-agent in gesprek.
+    </p>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:18px; margin:48px auto 0; max-width: 1280px;">
+      <figure style="margin:0;">
+        <div class="vid__frame" style="border-radius:14px;">
+          <video src="assets/videos/livoa-ugc.mp4" autoplay loop muted playsinline poster="assets/images/livoa-ugc-poster.jpg" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000;"></video>
+        </div>
+        <figcaption style="color:var(--ink-soft); font-size:14px; margin-top:12px;">Marketing-operator — Ecom Dashboard</figcaption>
+      </figure>
+      <figure style="margin:0;">
+        <div class="vid__frame" style="border-radius:14px;">
+          <video src="assets/videos/willoe-ugc.mp4" autoplay loop muted playsinline poster="assets/images/willoe-ugc-poster.jpg" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000;"></video>
+        </div>
+        <figcaption style="color:var(--ink-soft); font-size:14px; margin-top:12px;">Agency-owner — Agency Dashboard</figcaption>
+      </figure>
+      <figure style="margin:0;">
+        <div class="vid__frame" style="border-radius:14px;">
+          <video src="assets/videos/agents-ugc.mp4" autoplay loop muted playsinline poster="assets/images/agents-ugc-poster.jpg" style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;background:#000;"></video>
+        </div>
+        <figcaption style="color:var(--ink-soft); font-size:14px; margin-top:12px;">AI-agent in gesprek</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ───── Numbers strip ───── -->
+<section class="stats">
+  <div class="container" style="text-align:center;">
+    <span class="kicker kicker--center">Wat het oplevert</span>
+    <h2 class="h2 h2--center">Cijfers die je collega's overtuigen.</h2>
+    <div class="stats__grid">
+      <div><strong>14u</strong><span>gem. turnaround per service</span></div>
+      <div><strong>9+12</strong><span>modules across beide dashboards</span></div>
+      <div><strong>4×</strong><span>sneller dan je huidige toolstack</span></div>
+      <div><strong>0</strong><span>copy-paste tussen 7 tools</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── CTA ───── -->
+<section class="cta">
+  <div class="cta__inner">
+    <h2 class="display display--sm">Klaar om je eigen besturings&shy;systeem te zien?</h2>
+    <p class="lede lede--center">Plan een 30-minuten afspraak. We laten beide dashboards live zien — met jouw eigen data als demo.</p>
+    <a href="contact.html" class="btn btn--solid btn--lg">Plan een afspraak →</a>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <div>
+      <span class="brand">
+        <span class="brand__dot"></span>
+        <span class="brand__name">Willoe<span class="brand__sub"> AI</span></span>
+      </span>
+      <p class="foot__line">Het besturingssysteem voor ecom-businesses en agencies.</p>
+    </div>
+    <div class="foot__cols">
+      <div><h5>Product</h5>
+        <a href="livoa.html">Ecom Dashboard</a>
+        <a href="willoe.html">Agency Dashboard</a>
+        <a href="agents.html">AI Agents</a>
+      </div>
+      <div><h5>Juridisch</h5>
+        <a href="privacy.html">Privacybeleid</a>
+        <a href="terms.html">Algemene voorwaarden</a>
+        <a href="cookies.html">Cookies</a>
+      </div>
+      <div><h5>Bedrijf</h5>
+        <a href="contact.html">Contact</a>
+        <a href="contact.html">Plan demo</a>
+        <a href="contact.html">via Calendly</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot__bottom">© 2026 Willoe AI · Gebouwd in NL</div>
+</footer>
+
+</body>
+</html>
