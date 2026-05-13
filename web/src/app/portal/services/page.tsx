@@ -27,7 +27,7 @@ export default async function ServicesPage() {
         title="Service-catalogus"
         description="Activeer een service voor één van je klanten"
       />
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         <ServicesCatalog services={services} clients={clients} />
       </div>
     </>

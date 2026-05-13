@@ -94,7 +94,7 @@ export function BillingDashboard({
           </Button>
         }
       />
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-6">
         {/* KPIs */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           <KpiCard label="Betaald" value={`€${nl(kpis.paidThisMonth)}`} />
@@ -141,7 +141,8 @@ export function BillingDashboard({
             </Button>
           </Card>
         ) : (
-          <Card className="!p-0">
+          <Card className="!p-0 overflow-x-auto">
+            <div className="min-w-[780px]">
             <div className="grid grid-cols-[120px_1fr_120px_100px_100px_100px_44px] px-5 h-9 bg-[var(--bg-surface-2)] border-b border-[var(--border-default)] items-center text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium">
               <div>Nr.</div>
               <div>Type</div>
@@ -187,6 +188,7 @@ export function BillingDashboard({
                 )}
               </div>
             ))}
+            </div>
           </Card>
         )}
       </div>

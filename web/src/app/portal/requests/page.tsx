@@ -65,7 +65,7 @@ export default async function RequestsPage() {
         title="Aanvragen"
         description={`${active.length} actief · ${history.length} afgerond`}
       />
-      <div className="p-6 space-y-8">
+      <div className="p-4 md:p-6 space-y-8">
         {rows.length === 0 && (
           <Card className="p-12 text-center">
             <div className="size-12 rounded-xl bg-[var(--bg-surface-2)] grid place-items-center mx-auto mb-4">

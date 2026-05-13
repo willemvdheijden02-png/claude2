@@ -31,7 +31,7 @@ export default async function ClientsPage() {
         }
         action={<NewClientButton />}
       />
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {clients.length === 0 ? (
           <EmptyState />
         ) : (

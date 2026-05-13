@@ -33,7 +33,7 @@ export default function PortalOverviewPage() {
         title="Welkom terug, Northbeam"
         description="3 van 10 onboardings deze maand gebruikt"
       />
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-6">
         {/* Quota strip */}
         <Card className="p-5 bg-[var(--bg-surface-2)]">
           <div className="flex items-center justify-between mb-3">

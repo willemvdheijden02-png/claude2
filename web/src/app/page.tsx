@@ -66,18 +66,19 @@ export default function Home() {
             <span className="font-medium tracking-display">willoe</span>
           </div>
           <nav className="flex items-center gap-1">
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
               <Link href="/admin">Cockpit</Link>
             </Button>
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
               <Link href="/portal">Portal</Link>
             </Button>
-            <Button variant="ghost" size="sm" asChild>
+            <Button variant="ghost" size="sm" asChild className="hidden md:inline-flex">
               <Link href="#features">Features</Link>
             </Button>
             <Button size="sm" asChild>
               <Link href="/portal">
-                Open dashboard
+                <span className="hidden sm:inline">Open dashboard</span>
+                <span className="sm:hidden">Open</span>
                 <ArrowRight />
               </Link>
             </Button>

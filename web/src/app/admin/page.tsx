@@ -116,13 +116,14 @@ export default async function AdminOverviewPage() {
               Klik &ldquo;Impersoneer&rdquo; om als die agency in te loggen
             </CardDescription>
           </CardHeader>
-          <CardContent className="px-0 pt-0">
+          <CardContent className="px-0 pt-0 overflow-x-auto">
             {agencies.length === 0 ? (
               <div className="px-6 py-8 text-center text-[var(--text-tertiary)] text-[13px]">
                 Nog geen agencies.
               </div>
             ) : (
-              agencies.map((a) => (
+              <div className="min-w-[560px]">
+              {agencies.map((a) => (
                 <div
                   key={a.id}
                   className="grid grid-cols-[32px_1fr_100px_100px_110px] items-center gap-3 px-6 h-12 border-t border-[var(--border-default)] text-[13px]"
@@ -159,7 +160,8 @@ export default async function AdminOverviewPage() {
                     </button>
                   </form>
                 </div>
-              ))
+              ))}
+              </div>
             )}
           </CardContent>
         </Card>
@@ -176,13 +178,14 @@ export default async function AdminOverviewPage() {
               <Link href="/admin/queue">Open queue <ArrowUpRight /></Link>
             </Button>
           </CardHeader>
-          <CardContent className="px-0 pt-0">
+          <CardContent className="px-0 pt-0 overflow-x-auto">
             {recentRequests.length === 0 ? (
               <div className="px-6 py-8 text-center text-[var(--text-tertiary)] text-[13px]">
                 Nog geen aanvragen. Wachten op eerste agency die er een plaatst.
               </div>
             ) : (
-              recentRequests.map((r) => (
+              <div className="min-w-[640px]">
+              {recentRequests.map((r) => (
                 <Link
                   key={r.id}
                   href="/admin/queue"
@@ -199,7 +202,8 @@ export default async function AdminOverviewPage() {
                   <div className="text-[11px] text-[var(--text-tertiary)] tabular text-right">{rel(r.createdAt)}</div>
                   <ChevronRight className="size-4 text-[var(--text-tertiary)]" />
                 </Link>
-              ))
+              ))}
+              </div>
             )}
           </CardContent>
         </Card>

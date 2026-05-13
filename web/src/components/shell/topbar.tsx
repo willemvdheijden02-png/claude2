@@ -22,8 +22,8 @@ export function Topbar({
           </p>
         )}
       </div>
-      <div className="flex items-center gap-2">
-        <div className="hidden md:flex items-center gap-2 h-8 px-2.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] text-[12px] text-[var(--text-tertiary)] min-w-[220px]">
+      <div className="flex items-center gap-2 shrink-0">
+        <div className="hidden lg:flex items-center gap-2 h-8 px-2.5 rounded-md border border-[var(--border-default)] bg-[var(--bg-surface)] text-[12px] text-[var(--text-tertiary)] min-w-[220px]">
           <Search className="size-3.5" />
           <span>Zoeken...</span>
           <span className="ml-auto inline-flex items-center gap-0.5 text-[10px]">

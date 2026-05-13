@@ -32,7 +32,7 @@ export function BrowserFrame({
         <div className="size-5" />
       </div>
       {/* Content */}
-      <div className="bg-[var(--bg-canvas)]">{children}</div>
+      <div className="bg-[var(--bg-canvas)] overflow-x-auto">{children}</div>
     </div>
   );
 }

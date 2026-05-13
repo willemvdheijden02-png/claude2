@@ -41,7 +41,7 @@ export default async function ReportsPage() {
         title="Rapporten"
         description={`${reports.length} ${reports.length === 1 ? "rapport" : "rapporten"} geleverd · gebrand met ${ctx.agency.displayName}`}
       />
-      <div className="p-6">
+      <div className="p-4 md:p-6">
         {reports.length === 0 ? (
           <Card className="p-12 text-center">
             <div className="size-12 rounded-xl bg-[var(--bg-surface-2)] grid place-items-center mx-auto mb-4">

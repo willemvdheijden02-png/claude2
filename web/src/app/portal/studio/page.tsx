@@ -311,9 +311,9 @@ export default function StudioPage() {
         title="Studio"
         description="Beelden, scripts en video-ideeën — getuned op je brand DNA"
       />
-      <div className="grid grid-cols-[280px_1fr] h-[calc(100vh-3.5rem)]">
-        {/* Studio sidebar */}
-        <aside className="border-r border-[var(--border-default)] bg-[var(--bg-surface)] p-3 flex flex-col">
+      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] h-[calc(100vh-3.5rem)]">
+        {/* Studio sidebar — desktop only */}
+        <aside className="hidden md:flex border-r border-[var(--border-default)] bg-[var(--bg-surface)] p-3 flex-col">
           <button
             onClick={startNewChat}
             className="flex items-center gap-2 h-9 px-3 rounded-md bg-[var(--accent-500)] text-white text-[13px] font-medium hover:bg-[var(--accent-600)] transition-colors"
@@ -382,8 +382,21 @@ export default function StudioPage() {
 
         {/* Main */}
         <main className="flex flex-col min-w-0">
+          {/* Mobile new-chat bar */}
+          <div className="md:hidden flex items-center justify-between gap-2 px-4 h-11 border-b border-[var(--border-default)] bg-[var(--bg-surface)]">
+            <span className="text-[12px] text-[var(--text-tertiary)]">
+              {summaries.length} {summaries.length === 1 ? "chat" : "chats"}
+            </span>
+            <button
+              onClick={startNewChat}
+              className="flex items-center gap-1.5 h-8 px-3 rounded-md bg-[var(--accent-500)] text-white text-[12px] font-medium"
+            >
+              <Plus className="size-3.5" />
+              Nieuwe chat
+            </button>
+          </div>
           {/* Tabs */}
-          <div className="flex items-center gap-1 px-6 h-12 border-b border-[var(--border-default)]">
+          <div className="flex items-center gap-1 px-3 md:px-6 h-12 border-b border-[var(--border-default)] overflow-x-auto">
             {tabs.map((t) => {
               const Icon = t.icon;
               const isActive = mode === t.id;

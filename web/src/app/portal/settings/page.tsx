@@ -17,7 +17,7 @@ export default async function SettingsPage() {
   return (
     <>
       <Topbar title="Instellingen" description="Branding, account, team en facturatie" />
-      <div className="p-6 max-w-4xl">
+      <div className="p-4 md:p-6 max-w-4xl">
         <SettingsTabs
           agency={{
             displayName: ctx.agency.displayName,

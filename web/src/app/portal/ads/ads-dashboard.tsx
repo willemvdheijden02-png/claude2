@@ -138,7 +138,7 @@ export function AdsDashboard({
           </div>
         }
       />
-      <div className="p-6 space-y-6">
+      <div className="p-4 md:p-6 space-y-6">
         {/* Client picker + Meta connection status */}
         <Card className="p-4 bg-[var(--bg-surface-2)] flex items-center gap-4">
           <div className="size-9 rounded-md bg-[#1877F2]/15 grid place-items-center shrink-0">
@@ -254,7 +254,8 @@ export function AdsDashboard({
                 : "Laden..."}
             </CardDescription>
           </CardHeader>
-          <CardContent className="px-0 pt-0">
+          <CardContent className="px-0 pt-0 overflow-x-auto">
+            <div className="min-w-[720px]">
             <div className="grid grid-cols-[1fr_80px_100px_100px_100px_80px_80px] px-6 h-9 bg-[var(--bg-surface-2)] border-y border-[var(--border-default)] items-center text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium">
               <div>Campagne</div>
               <div className="text-right">Status</div>
@@ -313,6 +314,7 @@ export function AdsDashboard({
                 <div className="text-right tabular text-[var(--text-primary)]">{c.conversions}</div>
               </div>
             ))}
+            </div>
           </CardContent>
         </Card>
 

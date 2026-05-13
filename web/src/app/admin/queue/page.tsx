@@ -67,7 +67,8 @@ export default async function QueuePage() {
             </p>
           </Card>
         ) : (
-          <Card className="!p-0">
+          <Card className="!p-0 overflow-x-auto">
+            <div className="min-w-[880px]">
             <div className="grid grid-cols-[80px_1fr_160px_160px_120px_80px_44px] px-4 h-9 bg-[var(--bg-surface-2)] border-b border-[var(--border-default)] items-center text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium">
               <div>Status</div>
               <div>Service / Briefing</div>
@@ -98,6 +99,7 @@ export default async function QueuePage() {
                 <ChevronRight className="size-4 text-[var(--text-tertiary)] mt-0.5" />
               </div>
             ))}
+            </div>
           </Card>
         )}
       </div>

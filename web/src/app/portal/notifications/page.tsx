@@ -58,7 +58,7 @@ export default async function NotificationsPage() {
           ) : null
         }
       />
-      <div className="p-6 max-w-3xl">
+      <div className="p-4 md:p-6 max-w-3xl">
         {items.length === 0 ? (
           <div className="border border-[var(--border-default)] rounded-lg p-12 text-center bg-[var(--bg-surface)]">
             <Bell className="size-8 text-[var(--text-tertiary)] mx-auto mb-3" />

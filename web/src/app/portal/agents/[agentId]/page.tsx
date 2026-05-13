@@ -216,9 +216,9 @@ export default function AgentChatPage() {
           </Link>
         }
       />
-      <div className="grid grid-cols-[280px_1fr] h-[calc(100vh-3.5rem)]">
-        {/* Agent info panel */}
-        <aside className="border-r border-[var(--border-default)] bg-[var(--bg-surface)] p-4 flex flex-col">
+      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] h-[calc(100vh-3.5rem)]">
+        {/* Agent info panel — desktop only (info zit ook in chat header) */}
+        <aside className="hidden md:flex border-r border-[var(--border-default)] bg-[var(--bg-surface)] p-4 flex-col">
           {/* Agent card */}
           <div className="border border-[var(--border-default)] rounded-[var(--radius-lg)] overflow-hidden mb-4">
             <div className="h-1" style={{ backgroundColor: agent.color }} />
