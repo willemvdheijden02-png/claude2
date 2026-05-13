@@ -7,8 +7,21 @@ import {
   deleteIntegration,
   type IntegrationProvider,
 } from "@/lib/agency-keys";
+import {
+  syncMetaKpisForAgency,
+  listAccessibleAdAccounts,
+  type MetaSyncResult,
+} from "@/lib/meta/sync";
 
 export type IntegrationResult = { error: string } | { success: true };
+
+export type MetaPullResult =
+  | { error: string }
+  | {
+      success: true;
+      adAccounts: { id: string; name: string; currency: string }[];
+      sync: MetaSyncResult;
+    };
 
 const providerFields: Record<IntegrationProvider, string[]> = {
   anthropic: ["api_key"],
@@ -52,4 +65,24 @@ export async function disconnectIntegration(
   await deleteIntegration(ctx.agency.id, provider);
   revalidatePath("/portal/integrations");
   return {};
+}
+
+export async function pullMetaData(days = 30): Promise<MetaPullResult> {
+  const ctx = await getCurrentContext();
+  if (!ctx?.agency) return { error: "Geen actieve agency." };
+
+  try {
+    const adAccounts = await listAccessibleAdAccounts(ctx.agency.id);
+    const sync = await syncMetaKpisForAgency(ctx.agency.id, days);
+    revalidatePath("/portal/ads");
+    revalidatePath("/portal/integrations");
+    return {
+      success: true,
+      adAccounts: adAccounts.map((a) => ({ id: a.id, name: a.name, currency: a.currency })),
+      sync,
+    };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Onbekende fout";
+    return { error: msg };
+  }
 }

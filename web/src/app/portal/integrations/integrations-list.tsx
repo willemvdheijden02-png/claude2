@@ -1,15 +1,21 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Check, ExternalLink, Loader2, Plug, Trash2, X } from "lucide-react";
+import { Check, Download, ExternalLink, Loader2, Plug, Trash2, X } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { IntegrationProvider } from "@/lib/agency-keys";
 import type { AgencyIntegration } from "@/lib/db/schema";
-import { connectIntegration, disconnectIntegration, type IntegrationResult } from "./actions";
+import {
+  connectIntegration,
+  disconnectIntegration,
+  pullMetaData,
+  type IntegrationResult,
+  type MetaPullResult,
+} from "./actions";
 
 type ProviderInfo = {
   name: string;
@@ -100,6 +106,7 @@ function IntegrationCard({
               {existing.lastError}
             </div>
           )}
+          {provider === "meta" && isConnected && <MetaPullButton />}
           <div className="flex items-center justify-between gap-2 mt-auto">
             <a
               href={info.docsUrl}
@@ -218,6 +225,86 @@ function ConnectModal({
           </div>
         </form>
       </div>
+    </div>
+  );
+}
+
+function MetaPullButton() {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const [result, setResult] = useState<MetaPullResult | null>(null);
+  const [days, setDays] = useState(30);
+
+  function handlePull() {
+    setResult(null);
+    startTransition(async () => {
+      const res = await pullMetaData(days);
+      setResult(res);
+      if ("success" in res) router.refresh();
+    });
+  }
+
+  return (
+    <div className="border-t border-[var(--border-default)] -mx-6 px-6 pt-3 mt-3 mb-4">
+      <div className="flex items-center justify-between gap-3 mb-2">
+        <div className="text-[11px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium">
+          Data ophalen
+        </div>
+        <select
+          value={days}
+          onChange={(e) => setDays(parseInt(e.target.value, 10))}
+          disabled={pending}
+          className="h-7 px-2 rounded-md bg-[var(--bg-surface-2)] border border-[var(--border-default)] text-[11px] outline-none disabled:opacity-50"
+        >
+          <option value={7}>7 dagen</option>
+          <option value={14}>14 dagen</option>
+          <option value={30}>30 dagen</option>
+          <option value={90}>90 dagen</option>
+        </select>
+      </div>
+      <Button
+        size="sm"
+        variant="secondary"
+        onClick={handlePull}
+        disabled={pending}
+        className="w-full"
+      >
+        {pending ? <><Loader2 className="animate-spin" /> Ophalen...</> : <><Download /> Haal Meta data op</>}
+      </Button>
+      {result && "error" in result && (
+        <div className="mt-2 p-2 rounded-md bg-[rgb(239_68_68/0.08)] border border-[var(--status-danger)]/30 text-[11px] text-[var(--status-danger)]">
+          {result.error}
+        </div>
+      )}
+      {result && "success" in result && (
+        <div className="mt-2 space-y-1.5">
+          <div className="p-2 rounded-md bg-[rgb(16_185_129/0.08)] border border-[var(--status-success)]/30 text-[11px] text-[var(--status-success)] flex items-center gap-1.5">
+            <Check className="size-3" />
+            {result.sync.snapshotsWritten} snapshots geschreven voor {result.sync.clientsChecked} klanten
+          </div>
+          {result.adAccounts.length > 0 && (
+            <div className="p-2 rounded-md bg-[var(--bg-surface-2)] text-[10px] text-[var(--text-tertiary)] space-y-0.5">
+              <div className="font-medium text-[var(--text-secondary)] mb-1">
+                Toegankelijke ad accounts ({result.adAccounts.length}):
+              </div>
+              {result.adAccounts.slice(0, 5).map((a) => (
+                <div key={a.id} className="flex items-center justify-between font-mono">
+                  <span>{a.id}</span>
+                  <span className="text-[var(--text-tertiary)]">{a.name}</span>
+                </div>
+              ))}
+              {result.adAccounts.length > 5 && (
+                <div className="text-[var(--text-tertiary)] italic">+ {result.adAccounts.length - 5} meer…</div>
+              )}
+            </div>
+          )}
+          {result.sync.errors.length > 0 && (
+            <div className="p-2 rounded-md bg-[rgb(251_191_36/0.08)] border border-[var(--status-warning)]/30 text-[10px] text-[var(--status-warning)]">
+              {result.sync.errors.length} klant(en) hadden errors. Check Ads dashboard.
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
