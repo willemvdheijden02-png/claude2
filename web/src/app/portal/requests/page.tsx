@@ -120,7 +120,8 @@ export default async function RequestsPage() {
               </h2>
               <span className="text-[11px] tabular text-[var(--text-tertiary)]">{history.length}</span>
             </div>
-            <Card className="!p-0">
+            <Card className="!p-0 overflow-x-auto">
+              <div className="min-w-[640px]">
               {history.map((r) => (
                 <div
                   key={r.id}
@@ -135,6 +136,7 @@ export default async function RequestsPage() {
                   <ChevronRight className="size-4 text-[var(--text-tertiary)] justify-self-end" />
                 </div>
               ))}
+              </div>
             </Card>
           </section>
         )}

@@ -5,6 +5,7 @@ import { getStripe } from "@/lib/stripe/server";
 import { db, schema } from "@/lib/db";
 import { env } from "@/lib/env";
 import { planFromPriceId, PLANS } from "@/lib/plans";
+import { createNotification } from "@/lib/notifications";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -80,20 +81,51 @@ export async function POST(req: NextRequest) {
       case "invoice.paid": {
         const invoice = event.data.object as Stripe.Invoice;
         if (invoice.id) {
-          await db
+          const [updated] = await db
             .update(schema.invoices)
             .set({ status: "paid", paidAt: new Date(), updatedAt: new Date() })
-            .where(eq(schema.invoices.stripeInvoiceId, invoice.id));
+            .where(eq(schema.invoices.stripeInvoiceId, invoice.id))
+            .returning({
+              id: schema.invoices.id,
+              agencyId: schema.invoices.agencyId,
+              totalCents: schema.invoices.totalCents,
+              invoiceNumber: schema.invoices.invoiceNumber,
+            });
+          if (updated) {
+            await createNotification({
+              agencyId: updated.agencyId,
+              type: "invoice_paid",
+              title: `Factuur ${updated.invoiceNumber ?? ""} betaald`,
+              body: `€${(updated.totalCents / 100).toFixed(2)} ontvangen.`,
+              link: "/portal/billing",
+              sendEmail: true,
+            });
+          }
         }
         break;
       }
       case "invoice.payment_failed": {
         const invoice = event.data.object as Stripe.Invoice;
         if (invoice.id) {
-          await db
+          const [updated] = await db
             .update(schema.invoices)
             .set({ status: "overdue", updatedAt: new Date() })
-            .where(eq(schema.invoices.stripeInvoiceId, invoice.id));
+            .where(eq(schema.invoices.stripeInvoiceId, invoice.id))
+            .returning({
+              id: schema.invoices.id,
+              agencyId: schema.invoices.agencyId,
+              invoiceNumber: schema.invoices.invoiceNumber,
+            });
+          if (updated) {
+            await createNotification({
+              agencyId: updated.agencyId,
+              type: "invoice_overdue",
+              title: `Factuur ${updated.invoiceNumber ?? ""} te laat`,
+              body: "Betaling is mislukt. Controleer betaalmethode.",
+              link: "/portal/billing",
+              sendEmail: true,
+            });
+          }
         }
         break;
       }

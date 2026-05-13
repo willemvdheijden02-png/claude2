@@ -1,4 +1,5 @@
-import { Bell, Command, Search } from "lucide-react";
+import { Command, Search } from "lucide-react";
+import { NotificationsBell } from "./notifications-bell";
 
 export function Topbar({
   title,
@@ -10,7 +11,7 @@ export function Topbar({
   action?: React.ReactNode;
 }) {
   return (
-    <header className="h-14 border-b border-[var(--border-default)] px-6 flex items-center gap-4 bg-[var(--bg-canvas)] sticky top-0 z-30">
+    <header className="h-14 border-b border-[var(--border-default)] pl-16 pr-4 md:px-6 flex items-center gap-4 bg-[var(--bg-canvas)] sticky top-0 z-30">
       <div className="flex-1 min-w-0">
         <h1 className="text-[15px] font-medium tracking-tight truncate text-[var(--text-primary)]">
           {title}
@@ -29,12 +30,7 @@ export function Topbar({
             <Command className="size-3" />K
           </span>
         </div>
-        <button
-          className="size-8 rounded-md grid place-items-center text-[var(--text-secondary)] hover:bg-[var(--bg-surface-hover)] transition-colors"
-          aria-label="Notifications"
-        >
-          <Bell className="size-4" />
-        </button>
+        <NotificationsBell />
         {action}
       </div>
     </header>

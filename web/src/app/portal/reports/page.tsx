@@ -54,7 +54,8 @@ export default async function ReportsPage() {
             </p>
           </Card>
         ) : (
-          <Card className="!p-0">
+          <Card className="!p-0 overflow-x-auto">
+            <div className="min-w-[640px]">
             <div className="grid grid-cols-[1fr_180px_140px_100px_44px] px-5 h-9 bg-[var(--bg-surface-2)] border-b border-[var(--border-default)] items-center text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium">
               <div>Rapport</div>
               <div>Klant</div>
@@ -90,6 +91,7 @@ export default async function ReportsPage() {
                 )}
               </div>
             ))}
+            </div>
           </Card>
         )}
       </div>

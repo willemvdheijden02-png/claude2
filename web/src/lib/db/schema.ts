@@ -87,6 +87,18 @@ export const agencyPlanEnum = pgEnum("agency_plan", [
   "cancelled",
 ]);
 
+export const notificationTypeEnum = pgEnum("notification_type", [
+  "request_done",
+  "request_failed",
+  "invoice_paid",
+  "invoice_overdue",
+  "trial_expiring",
+  "meta_token_expiring",
+  "client_added",
+  "integration_invalid",
+  "general",
+]);
+
 // ============================================================
 // USERS — profiel bovenop auth.users (Supabase managed)
 // ============================================================
@@ -124,6 +136,9 @@ export const agencies = pgTable(
     plan: agencyPlanEnum("plan").default("trial").notNull(),
     trialEndsAt: timestamp("trial_ends_at", { withTimezone: true }).defaultNow().notNull(),
     currentPeriodEndsAt: timestamp("current_period_ends_at", { withTimezone: true }),
+    // Notification preferences
+    notifyEmail: boolean("notify_email").default(true).notNull(),
+    notifyEmailAddress: text("notify_email_address"),
     // BTW + facturatie config
     vatRate: integer("vat_rate").default(21).notNull(), // % — 0 voor KOR
     kvkNumber: text("kvk_number"),
@@ -156,6 +171,10 @@ export const clients = pgTable(
     metaAdAccountId: text("meta_ad_account_id"),
     googleAdsCustomerId: text("google_ads_customer_id"),
     status: clientStatusEnum("status").default("new").notNull(),
+    portalEnabled: boolean("portal_enabled").default(false).notNull(),
+    portalToken: text("portal_token").unique(),
+    portalEmail: text("portal_email"),
+    portalLastViewedAt: timestamp("portal_last_viewed_at", { withTimezone: true }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
@@ -314,6 +333,32 @@ export const invoices = pgTable(
     index("idx_invoices_status").on(t.status),
   ]
 );
+
+// ============================================================
+// NOTIFICATIONS
+// ============================================================
+
+export const notifications = pgTable(
+  "notifications",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    agencyId: uuid("agency_id").notNull().references(() => agencies.id, { onDelete: "cascade" }),
+    recipientUserId: uuid("recipient_user_id").references(() => users.id, { onDelete: "cascade" }),
+    type: notificationTypeEnum("type").notNull(),
+    title: text("title").notNull(),
+    body: text("body"),
+    link: text("link"),
+    metadata: jsonb("metadata").default({}),
+    readAt: timestamp("read_at", { withTimezone: true }),
+    emailSentAt: timestamp("email_sent_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_notifications_agency").on(t.agencyId),
+  ]
+);
+
+export type Notification = typeof notifications.$inferSelect;
 
 // ============================================================
 // AGENCY INTEGRATIONS — BYOK (Bring Your Own Keys)
