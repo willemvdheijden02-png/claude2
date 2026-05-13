@@ -1,9 +1,9 @@
 import { eq, desc, inArray } from "drizzle-orm";
-import { ChevronRight } from "lucide-react";
 import { Topbar } from "@/components/shell/topbar";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { db, schema } from "@/lib/db";
+import { QueueRowActions } from "./queue-row-actions";
 
 const statusToTone = {
   pending: "warning",
@@ -69,7 +69,7 @@ export default async function QueuePage() {
         ) : (
           <Card className="!p-0 overflow-x-auto">
             <div className="min-w-[880px]">
-            <div className="grid grid-cols-[80px_1fr_160px_160px_120px_80px_44px] px-4 h-9 bg-[var(--bg-surface-2)] border-b border-[var(--border-default)] items-center text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium">
+            <div className="grid grid-cols-[80px_1fr_160px_160px_120px_80px_72px] px-4 h-9 bg-[var(--bg-surface-2)] border-b border-[var(--border-default)] items-center text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium">
               <div>Status</div>
               <div>Service / Briefing</div>
               <div>Agency</div>
@@ -81,7 +81,7 @@ export default async function QueuePage() {
             {rows.map((r) => (
               <div
                 key={r.id}
-                className="grid grid-cols-[80px_1fr_160px_160px_120px_80px_44px] px-4 py-3 items-start border-b border-[var(--border-default)] last:border-0 hover:bg-[var(--bg-surface-hover)] transition-colors text-[13px]"
+                className="grid grid-cols-[80px_1fr_160px_160px_120px_80px_72px] px-4 py-3 items-start border-b border-[var(--border-default)] last:border-0 hover:bg-[var(--bg-surface-hover)] transition-colors text-[13px]"
               >
                 <Badge tone={statusToTone[r.status]} className="h-[18px] px-1.5 text-[9px] w-fit">
                   {statusLabels[r.status]}
@@ -96,7 +96,7 @@ export default async function QueuePage() {
                 <div className="text-[var(--text-secondary)]">{r.clientName}</div>
                 <div className="text-[11px] font-mono text-[var(--text-tertiary)]">{r.skillCommand}</div>
                 <div className="text-[var(--text-tertiary)] text-[12px] tabular">{rel(r.createdAt)}</div>
-                <ChevronRight className="size-4 text-[var(--text-tertiary)] mt-0.5" />
+                <QueueRowActions requestId={r.id} />
               </div>
             ))}
             </div>
