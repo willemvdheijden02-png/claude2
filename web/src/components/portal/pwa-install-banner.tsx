@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, Share, X } from "lucide-react";
+import { Download, Share, X, MoreVertical } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
@@ -10,35 +10,43 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function PwaInstallBanner() {
   const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
-  const [isIOS, setIsIOS] = useState(false);
+  const [platform, setPlatform] = useState<"ios" | "android" | "other" | null>(null);
   const [isStandalone, setIsStandalone] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [iosGuide, setIosGuide] = useState(false);
+  const [guide, setGuide] = useState(false);
 
   useEffect(() => {
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as Window & { MSStream?: unknown }).MSStream;
-    const standalone = window.matchMedia("(display-mode: standalone)").matches || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    const ua = navigator.userAgent;
+    const win = window as Window & { MSStream?: unknown };
+    const nav = navigator as Navigator & { standalone?: boolean };
 
-    setIsIOS(ios);
+    const ios = /iPad|iPhone|iPod/.test(ua) && !win.MSStream;
+    const android = /Android/.test(ua);
+    const mobile = ios || android || window.innerWidth < 768;
+    const standalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      nav.standalone === true;
+
     setIsStandalone(standalone);
-
-    if (standalone) return; // already installed
+    if (!mobile) return;           // desktop: niet tonen
+    if (standalone) return;        // al geïnstalleerd
     if (localStorage.getItem("pwa-dismissed")) return;
+
+    setPlatform(ios ? "ios" : android ? "android" : "other");
 
     const handler = (e: Event) => {
       e.preventDefault();
       setInstallEvent(e as BeforeInstallPromptEvent);
-      setTimeout(() => setVisible(true), 3000);
     };
-
     window.addEventListener("beforeinstallprompt", handler);
 
-    // iOS doesn't fire beforeinstallprompt — show manually after delay
-    if (ios) {
-      setTimeout(() => setVisible(true), 3000);
-    }
+    // Toon na 3 seconden op elk mobiel apparaat
+    const t = setTimeout(() => setVisible(true), 3000);
 
-    return () => window.removeEventListener("beforeinstallprompt", handler);
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+      clearTimeout(t);
+    };
   }, []);
 
   function dismiss() {
@@ -47,25 +55,28 @@ export function PwaInstallBanner() {
   }
 
   async function install() {
-    if (isIOS) {
-      setIosGuide(true);
+    if (platform === "ios") {
+      setGuide(true);
       return;
     }
-    if (!installEvent) return;
-    await installEvent.prompt();
-    const { outcome } = await installEvent.userChoice;
-    if (outcome === "accepted") {
-      setVisible(false);
+    if (installEvent) {
+      await installEvent.prompt();
+      const { outcome } = await installEvent.userChoice;
+      if (outcome === "accepted") setVisible(false);
+      setInstallEvent(null);
+      return;
     }
-    setInstallEvent(null);
+    // Android zonder install event → handleiding
+    setGuide(true);
   }
 
-  if (!visible || isStandalone) return null;
-  if (!isIOS && !installEvent) return null;
+  if (!visible || isStandalone || !platform) return null;
+
+  const buttonLabel = platform === "ios" ? "Hoe?" : installEvent ? "Installeer" : "Hoe?";
 
   return (
     <>
-      {/* Install banner */}
+      {/* Banner */}
       <div
         className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
         style={{
@@ -94,8 +105,14 @@ export function PwaInstallBanner() {
           className="flex items-center gap-1.5 px-3 h-8 rounded-lg text-[12px] font-semibold text-white shrink-0"
           style={{ background: "#2563eb" }}
         >
-          {isIOS ? <Share className="size-3.5" /> : <Download className="size-3.5" />}
-          Installeer
+          {platform === "ios" ? (
+            <Share className="size-3.5" />
+          ) : installEvent ? (
+            <Download className="size-3.5" />
+          ) : (
+            <MoreVertical className="size-3.5" />
+          )}
+          {buttonLabel}
         </button>
         <button
           onClick={dismiss}
@@ -105,11 +122,11 @@ export function PwaInstallBanner() {
         </button>
       </div>
 
-      {/* iOS guide modal */}
-      {iosGuide && (
+      {/* Handleiding modal */}
+      {guide && (
         <div
           className="fixed inset-0 z-50 bg-black/70 grid place-items-end pb-8"
-          onClick={() => setIosGuide(false)}
+          onClick={() => setGuide(false)}
         >
           <div
             className="mx-4 p-5 rounded-2xl w-full max-w-sm"
@@ -118,31 +135,55 @@ export function PwaInstallBanner() {
           >
             <div className="flex items-center justify-between mb-4">
               <span className="text-[15px] font-semibold text-[var(--text-primary)]">
-                Installeer op iPhone / iPad
+                {platform === "ios" ? "Installeer op iPhone / iPad" : "Installeer op Android"}
               </span>
-              <button onClick={() => setIosGuide(false)} className="text-[var(--text-tertiary)]">
+              <button onClick={() => setGuide(false)} className="text-[var(--text-tertiary)]">
                 <X className="size-5" />
               </button>
             </div>
-            <ol className="space-y-3">
-              {[
-                { step: "1", text: "Tik op het Deel-icoon (vak met pijltje omhoog) onder in Safari" },
-                { step: "2", text: `Scroll naar beneden en tik op “Zet op beginscherm”` },
-                { step: "3", text: `Tik op “Voeg toe” — klaar! De app staat nu op je beginscherm.` },
-              ].map(({ step, text }) => (
-                <li key={step} className="flex items-start gap-3">
-                  <span
-                    className="size-6 rounded-full text-[11px] font-bold grid place-items-center shrink-0 text-white"
-                    style={{ background: "#2563eb" }}
-                  >
-                    {step}
-                  </span>
-                  <span className="text-[13px] text-[var(--text-secondary)] leading-snug">{text}</span>
-                </li>
-              ))}
-            </ol>
+
+            {platform === "ios" ? (
+              <ol className="space-y-3">
+                {[
+                  { step: "1", text: "Tik op het Deel-icoon (vak met pijltje omhoog) onder in Safari" },
+                  { step: "2", text: `Scroll naar beneden en tik op "Zet op beginscherm"` },
+                  { step: "3", text: `Tik op "Voeg toe" — klaar! De app staat nu op je beginscherm.` },
+                ].map(({ step, text }) => (
+                  <li key={step} className="flex items-start gap-3">
+                    <span
+                      className="size-6 rounded-full text-[11px] font-bold grid place-items-center shrink-0 text-white"
+                      style={{ background: "#2563eb" }}
+                    >
+                      {step}
+                    </span>
+                    <span className="text-[13px] text-[var(--text-secondary)] leading-snug">{text}</span>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <ol className="space-y-3">
+                {[
+                  { step: "1", text: "Tik op de drie puntjes (⋮) rechtsboven in Chrome" },
+                  { step: "2", text: `Tik op "Toevoegen aan startscherm"` },
+                  { step: "3", text: `Tik op "Toevoegen" — de app staat op je startscherm.` },
+                ].map(({ step, text }) => (
+                  <li key={step} className="flex items-start gap-3">
+                    <span
+                      className="size-6 rounded-full text-[11px] font-bold grid place-items-center shrink-0 text-white"
+                      style={{ background: "#2563eb" }}
+                    >
+                      {step}
+                    </span>
+                    <span className="text-[13px] text-[var(--text-secondary)] leading-snug">{text}</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+
             <div className="mt-4 pt-4 border-t border-[var(--border-default)] text-[11px] text-[var(--text-tertiary)]">
-              Werkt alleen in Safari. Niet in Chrome of Firefox.
+              {platform === "ios"
+                ? "Werkt alleen in Safari. Niet in Chrome of Firefox."
+                : "Werkt in Chrome, Edge en Samsung Internet."}
             </div>
           </div>
         </div>
