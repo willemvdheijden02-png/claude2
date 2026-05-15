@@ -67,7 +67,62 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
 
   return (
     <>
-      <div className="border border-[var(--border-default)] rounded-[var(--radius-lg)] overflow-x-auto bg-[var(--bg-surface)]">
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {clients.map((c) => (
+          <div
+            key={c.id}
+            className="border border-[var(--border-default)] rounded-[var(--radius-lg)] bg-[var(--bg-surface)] p-4"
+          >
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="size-9 rounded-md bg-[var(--bg-surface-2)] grid place-items-center text-[13px] font-semibold text-[var(--text-secondary)] shrink-0">
+                  {c.displayName.charAt(0).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[14px] font-medium text-[var(--text-primary)] truncate">{c.displayName}</div>
+                  {c.websiteUrl && (
+                    <div className="text-[11px] text-[var(--text-tertiary)] truncate">
+                      {c.websiteUrl.replace(/^https?:\/\//, "")}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <Badge tone={statusToTone[c.status]} className="h-[18px] px-1.5 text-[9px] shrink-0">
+                {statusToLabel[c.status]}
+              </Badge>
+            </div>
+            <div className="flex items-center gap-2 text-[12px] text-[var(--text-secondary)]">
+              <span>{c.budgetMonthlyCents !== null ? `${eur(c.budgetMonthlyCents)}/mnd` : "Geen budget"}</span>
+              {c.metaAdAccountId && <span className="text-[var(--status-success)]">· Meta ✓</span>}
+              {c.googleAdsCustomerId && <span className="text-[var(--status-success)]">· Google ✓</span>}
+            </div>
+            <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border-default)]">
+              <button
+                onClick={(e) => { e.stopPropagation(); setPortalClient(c); }}
+                className="text-[12px] font-medium px-3 h-7 rounded-md flex items-center gap-1.5"
+                style={
+                  c.portalEnabled
+                    ? { background: "var(--accent-glow)", color: "var(--accent-500)" }
+                    : { background: "var(--bg-surface-2)", color: "var(--text-tertiary)" }
+                }
+              >
+                <LinkIcon className="size-3" />
+                {c.portalEnabled ? "Portaal actief" : "Portaal inschakelen"}
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setConfirmDelete(c); }}
+                className="size-7 rounded-md grid place-items-center text-[var(--text-tertiary)] hover:text-[var(--status-danger)] transition-colors"
+              >
+                <Trash2 className="size-3.5" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block border border-[var(--border-default)] rounded-[var(--radius-lg)] overflow-x-auto bg-[var(--bg-surface)]">
         <div className="min-w-[720px]">
         <div className="grid grid-cols-[1fr_120px_110px_70px_90px_90px_44px] px-5 h-9 bg-[var(--bg-surface-2)] border-b border-[var(--border-default)] items-center text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium">
           <div>Klant</div>
@@ -183,9 +238,10 @@ function PortalDialog({ client, onClose }: { client: Client; onClose: () => void
   const [email, setEmail] = useState(client.portalEmail ?? "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const clientPortalBase = process.env.NEXT_PUBLIC_CLIENT_PORTAL_URL ?? "https://client-portal-production-f21d.up.railway.app";
   const [portalUrl, setPortalUrl] = useState<string | null>(
     client.portalEnabled && client.portalToken
-      ? `${typeof window !== "undefined" ? window.location.origin : ""}/c/${client.portalToken}`
+      ? `${clientPortalBase}/c/${client.portalToken}`
       : null
   );
   const [emailSent, setEmailSent] = useState<boolean | null>(null);

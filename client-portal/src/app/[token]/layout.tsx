@@ -84,7 +84,7 @@ export default async function PortalLayout({
         unreadCount={unread}
         pendingCount={pending}
       />
-      <main className="flex-1 overflow-y-auto bg-canvas p-6 lg:p-8">{children}</main>
+      <main className="flex-1 overflow-y-auto bg-canvas px-4 pt-14 pb-6 lg:p-8">{children}</main>
     </div>
   );
 }

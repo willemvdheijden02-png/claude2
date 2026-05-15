@@ -123,7 +123,29 @@ export default async function RequestsPage() {
               </h2>
               <span className="text-[11px] tabular text-[var(--text-tertiary)]">{history.length}</span>
             </div>
-            <Card className="!p-0 overflow-x-auto">
+            {/* Mobile cards */}
+            <div className="md:hidden space-y-2">
+              {history.map((r) => (
+                <Link key={r.id} href={`/portal/requests/${r.id}`}>
+                  <Card className="p-4 hover:border-[var(--border-strong)] transition-colors">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Badge tone={statusToTone[r.status]} className="h-[18px] px-1.5 text-[9px] shrink-0">
+                          {statusToLabel[r.status]}
+                        </Badge>
+                        <div className="min-w-0">
+                          <div className="text-[13px] font-medium text-[var(--text-primary)] truncate">{r.serviceName}</div>
+                          <div className="text-[11px] text-[var(--text-secondary)] truncate">{r.clientName} · {rel(r.completedAt ?? r.createdAt)}</div>
+                        </div>
+                      </div>
+                      <ChevronRight className="size-4 text-[var(--text-tertiary)] shrink-0" />
+                    </div>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+            {/* Desktop table */}
+            <Card className="hidden md:block !p-0 overflow-x-auto">
               <div className="min-w-[640px]">
               {history.map((r) => (
                 <Link key={r.id} href={`/portal/requests/${r.id}`}>

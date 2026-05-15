@@ -150,8 +150,8 @@ export async function enableClientPortal(
     })
     .where(eq(schema.clients.id, clientId));
 
-  const siteUrl = env("NEXT_PUBLIC_SITE_URL") ?? "http://localhost:3002";
-  const portalUrl = `${siteUrl}/c/${token}`;
+  const portalBase = env("NEXT_PUBLIC_CLIENT_PORTAL_URL") ?? "https://client-portal-production-f21d.up.railway.app";
+  const portalUrl = `${portalBase}/c/${token}`;
 
   const sent = await sendPortalMagicLink(
     email,
