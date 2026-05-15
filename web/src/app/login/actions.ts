@@ -58,7 +58,7 @@ export async function signUpWithPassword(
 
 export async function signInWithGoogle() {
   const supabase = await createSupabaseServer();
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001";
+  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002";
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: { redirectTo: `${origin}/auth/callback?next=/portal` },
