@@ -92,7 +92,7 @@ export function PwaInstallBanner() {
         <button
           onClick={install}
           className="flex items-center gap-1.5 px-3 h-8 rounded-lg text-[12px] font-semibold text-white shrink-0"
-          style={{ background: "var(--accent-500)" }}
+          style={{ background: "#2563eb" }}
         >
           {isIOS ? <Share className="size-3.5" /> : <Download className="size-3.5" />}
           Installeer
@@ -133,7 +133,7 @@ export function PwaInstallBanner() {
                 <li key={step} className="flex items-start gap-3">
                   <span
                     className="size-6 rounded-full text-[11px] font-bold grid place-items-center shrink-0 text-white"
-                    style={{ background: "var(--accent-500)" }}
+                    style={{ background: "#2563eb" }}
                   >
                     {step}
                   </span>
