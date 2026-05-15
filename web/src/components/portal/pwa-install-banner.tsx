@@ -145,8 +145,8 @@ export function PwaInstallBanner() {
       <div
         className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl"
         style={{
-          background: "var(--bg-surface)",
-          border: "1px solid var(--border-strong)",
+          background: "var(--bg-surface, #1a1a2e)",
+          border: "1px solid var(--border-strong, rgba(255,255,255,0.12))",
           maxWidth: "min(380px, calc(100vw - 32px))",
           width: "100%",
           backdropFilter: "blur(12px)",
@@ -158,10 +158,10 @@ export function PwaInstallBanner() {
           style={{ width: 40, height: 40, borderRadius: 10, flexShrink: 0 }}
         />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="text-[13px] font-semibold text-[var(--text-primary)] truncate">
+          <div className="text-[13px] font-semibold truncate" style={{ color: "var(--text-primary, #f1f5f9)" }}>
             Agency Dashboard
           </div>
-          <div className="text-[11px] text-[var(--text-secondary)]">{subtitle}</div>
+          <div className="text-[11px]" style={{ color: "var(--text-secondary, #94a3b8)" }}>{subtitle}</div>
         </div>
         <button
           onClick={install}
@@ -173,7 +173,8 @@ export function PwaInstallBanner() {
         </button>
         <button
           onClick={dismiss}
-          className="size-7 rounded-md grid place-items-center text-[var(--text-tertiary)] hover:bg-[var(--bg-surface-hover)] shrink-0"
+          className="size-7 rounded-md grid place-items-center shrink-0"
+          style={{ color: "var(--text-tertiary, #64748b)" }}
         >
           <X className="size-4" />
         </button>
@@ -187,14 +188,14 @@ export function PwaInstallBanner() {
         >
           <div
             className="p-5 rounded-2xl w-full max-w-sm"
-            style={{ background: "var(--bg-surface)", border: "1px solid var(--border-strong)" }}
+            style={{ background: "var(--bg-surface, #1a1a2e)", border: "1px solid var(--border-strong, rgba(255,255,255,0.12))" }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[15px] font-semibold text-[var(--text-primary)]">
+              <span className="text-[15px] font-semibold" style={{ color: "var(--text-primary, #f1f5f9)" }}>
                 {currentGuide.title}
               </span>
-              <button onClick={() => setGuide(false)} className="text-[var(--text-tertiary)]">
+              <button onClick={() => setGuide(false)} style={{ color: "var(--text-tertiary, #64748b)" }}>
                 <X className="size-5" />
               </button>
             </div>
@@ -207,11 +208,11 @@ export function PwaInstallBanner() {
                   >
                     {i + 1}
                   </span>
-                  <span className="text-[13px] text-[var(--text-secondary)] leading-snug">{text}</span>
+                  <span className="text-[13px] leading-snug" style={{ color: "var(--text-secondary, #94a3b8)" }}>{text}</span>
                 </li>
               ))}
             </ol>
-            <div className="mt-4 pt-4 border-t border-[var(--border-default)] text-[11px] text-[var(--text-tertiary)]">
+            <div className="mt-4 pt-4 text-[11px]" style={{ borderTop: "1px solid var(--border-default, rgba(255,255,255,0.08))", color: "var(--text-tertiary, #64748b)" }}>
               {currentGuide.note}
             </div>
           </div>

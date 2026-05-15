@@ -5,7 +5,6 @@ import { AgencySidebar } from "@/components/shell/agency-sidebar";
 import { FirstRunTour } from "@/components/portal/first-run-tour";
 import { CrispWidget } from "@/components/portal/crisp-widget";
 import { TrialBanner, ExpiredBanner } from "@/components/portal/trial-banner";
-import { PwaInstallBanner } from "@/components/portal/pwa-install-banner";
 import { getCurrentContext } from "@/lib/auth/current";
 import { daysLeftInTrial, isTrialActive } from "@/lib/plans";
 import { db, schema } from "@/lib/db";
@@ -85,7 +84,6 @@ export default async function PortalLayout({
       </main>
       <FirstRunTour />
       <CrispWidget />
-      <PwaInstallBanner />
     </div>
   );
 }

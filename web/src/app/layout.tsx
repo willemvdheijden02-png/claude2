@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@/components/analytics";
+import { PwaInstallBanner } from "@/components/portal/pwa-install-banner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,6 +48,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-canvas text-text-primary">
         {children}
+        <PwaInstallBanner />
         <Analytics />
         <script dangerouslySetInnerHTML={{__html:`
           if('serviceWorker' in navigator){
