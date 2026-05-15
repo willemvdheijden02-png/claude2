@@ -9,6 +9,12 @@ export async function GET(request: Request) {
   const code = url.searchParams.get("code");
   const next = url.searchParams.get("next") ?? "/portal";
 
+  // Gebruik de publieke site URL — niet url.origin, want op Railway is
+  // dat de interne host (localhost:8080) in plaats van de publieke URL.
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    `${url.protocol}//${request.headers.get("x-forwarded-host") || url.host}`;
+
   if (code) {
     const supabase = await createSupabaseServer();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
@@ -30,9 +36,9 @@ export async function GET(request: Request) {
         })
         .onConflictDoNothing(); // bestaat al → niets doen
 
-      return NextResponse.redirect(`${url.origin}${next}`);
+      return NextResponse.redirect(`${siteUrl}${next}`);
     }
   }
 
-  return NextResponse.redirect(`${url.origin}/login?error=callback`);
+  return NextResponse.redirect(`${siteUrl}/login?error=callback`);
 }
