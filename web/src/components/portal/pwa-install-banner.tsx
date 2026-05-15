@@ -22,13 +22,11 @@ export function PwaInstallBanner() {
 
     const ios = /iPad|iPhone|iPod/.test(ua) && !win.MSStream;
     const android = /Android/.test(ua);
-    const mobile = ios || android || window.innerWidth < 768;
     const standalone =
       window.matchMedia("(display-mode: standalone)").matches ||
       nav.standalone === true;
 
     setIsStandalone(standalone);
-    if (!mobile) return;           // desktop: niet tonen
     if (standalone) return;        // al geïnstalleerd
     if (localStorage.getItem("pwa-dismissed")) return;
 
