@@ -58,7 +58,20 @@ export async function signUpWithPassword(
 
 export async function signInWithGoogle() {
   const supabase = await createSupabaseServer();
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3002";
+
+  // Detecteer de echte publieke URL — werkt op localhost én Railway
+  const { headers } = await import("next/headers");
+  const h = await headers();
+  const forwardedHost = h.get("x-forwarded-host");
+  const forwardedProto = h.get("x-forwarded-proto") || "https";
+  const host = h.get("host") || "localhost:3002";
+
+  const origin =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (forwardedHost
+      ? `${forwardedProto}://${forwardedHost}`
+      : `http://${host}`);
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: { redirectTo: `${origin}/auth/callback?next=/portal` },
@@ -72,7 +85,7 @@ export async function signInWithGoogle() {
 
 export async function signOut() {
   const supabase = await createSupabaseServer();
-  await supabase.auth.signOut();
+  await supabase.auth.signOut({ scope: "local" });
   redirect("/login");
 }
 
