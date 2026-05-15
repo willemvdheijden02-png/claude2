@@ -45,7 +45,7 @@ export async function adminCreateAgency(
   const { data: inviteData, error: inviteError } =
     await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
       data: { full_name: displayName, role: "agency_admin" },
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001"}/auth/callback?next=/portal`,
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3002"}/auth/callback?next=/portal`,
     });
 
   if (inviteError && !inviteError.message.includes("already been registered")) {

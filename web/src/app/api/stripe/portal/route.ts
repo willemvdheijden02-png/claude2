@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const stripe = getStripe();
-    const origin = env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3001";
+    const origin = env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3002";
 
     const session = await stripe.billingPortal.sessions.create({
       customer: ctx.agency.stripeCustomerId,

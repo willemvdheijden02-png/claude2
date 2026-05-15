@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { eq, desc, inArray } from "drizzle-orm";
+import Link from "next/link";
+import { eq, desc } from "drizzle-orm";
 import { ChevronRight, Inbox } from "lucide-react";
 import { Topbar } from "@/components/shell/topbar";
 import { Card } from "@/components/ui/card";
@@ -88,25 +89,27 @@ export default async function RequestsPage() {
             </div>
             <div className="grid gap-3">
               {active.map((r) => (
-                <Card key={r.id} className="p-5 hover:border-[var(--border-strong)] transition-colors cursor-pointer">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-start gap-3 min-w-0">
-                      <Badge tone={statusToTone[r.status]} className="h-[18px] px-1.5 text-[9px]">
-                        {statusToLabel[r.status]}
-                      </Badge>
-                      <div className="min-w-0">
-                        <div className="text-[14px] font-medium text-[var(--text-primary)] truncate">{r.serviceName}</div>
-                        <div className="text-[12px] text-[var(--text-secondary)]">
-                          voor <span className="text-[var(--text-primary)]">{r.clientName}</span> · ingediend {rel(r.createdAt)}
+                <Link key={r.id} href={`/portal/requests/${r.id}`}>
+                  <Card className="p-5 hover:border-[var(--border-strong)] transition-colors cursor-pointer">
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <Badge tone={statusToTone[r.status]} className="h-[18px] px-1.5 text-[9px]">
+                          {statusToLabel[r.status]}
+                        </Badge>
+                        <div className="min-w-0">
+                          <div className="text-[14px] font-medium text-[var(--text-primary)] truncate">{r.serviceName}</div>
+                          <div className="text-[12px] text-[var(--text-secondary)]">
+                            voor <span className="text-[var(--text-primary)]">{r.clientName}</span> · ingediend {rel(r.createdAt)}
+                          </div>
+                          {r.brief && (
+                            <div className="text-[12px] text-[var(--text-tertiary)] mt-2 line-clamp-2 italic">"{r.brief}"</div>
+                          )}
                         </div>
-                        {r.brief && (
-                          <div className="text-[12px] text-[var(--text-tertiary)] mt-2 line-clamp-2 italic">"{r.brief}"</div>
-                        )}
                       </div>
+                      <ChevronRight className="size-4 text-[var(--text-tertiary)]" />
                     </div>
-                    <ChevronRight className="size-4 text-[var(--text-tertiary)]" />
-                  </div>
-                </Card>
+                  </Card>
+                </Link>
               ))}
             </div>
           </section>
@@ -123,18 +126,17 @@ export default async function RequestsPage() {
             <Card className="!p-0 overflow-x-auto">
               <div className="min-w-[640px]">
               {history.map((r) => (
-                <div
-                  key={r.id}
-                  className="grid grid-cols-[80px_1fr_140px_120px_44px] px-5 h-12 items-center border-b border-[var(--border-default)] last:border-0 hover:bg-[var(--bg-surface-hover)] transition-colors text-[13px] cursor-pointer"
-                >
-                  <Badge tone={statusToTone[r.status]} className="h-[18px] px-1.5 text-[9px] w-fit">
-                    {statusToLabel[r.status]}
-                  </Badge>
-                  <div>{r.serviceName}</div>
-                  <div className="text-[var(--text-secondary)]">{r.clientName}</div>
-                  <div className="text-[var(--text-tertiary)] text-[12px] tabular">{rel(r.completedAt ?? r.createdAt)}</div>
-                  <ChevronRight className="size-4 text-[var(--text-tertiary)] justify-self-end" />
-                </div>
+                <Link key={r.id} href={`/portal/requests/${r.id}`}>
+                  <div className="grid grid-cols-[80px_1fr_140px_120px_44px] px-5 h-12 items-center border-b border-[var(--border-default)] last:border-0 hover:bg-[var(--bg-surface-hover)] transition-colors text-[13px] cursor-pointer">
+                    <Badge tone={statusToTone[r.status]} className="h-[18px] px-1.5 text-[9px] w-fit">
+                      {statusToLabel[r.status]}
+                    </Badge>
+                    <div>{r.serviceName}</div>
+                    <div className="text-[var(--text-secondary)]">{r.clientName}</div>
+                    <div className="text-[var(--text-tertiary)] text-[12px] tabular">{rel(r.completedAt ?? r.createdAt)}</div>
+                    <ChevronRight className="size-4 text-[var(--text-tertiary)] justify-self-end" />
+                  </div>
+                </Link>
               ))}
               </div>
             </Card>

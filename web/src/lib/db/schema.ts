@@ -185,20 +185,30 @@ export const clients = pgTable(
 // SERVICES — catalog van skills die agencies kunnen aanvragen
 // ============================================================
 
-export const services = pgTable("services", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  slug: text("slug").notNull().unique(),
-  displayName: text("display_name").notNull(),
-  description: text("description").notNull(),
-  iconName: text("icon_name").notNull(),
-  category: serviceCategoryEnum("category").notNull(),
-  estimatedTurnaroundHours: integer("estimated_turnaround_hours").default(24).notNull(),
-  priceCents: integer("price_cents").default(0).notNull(),
-  skillCommand: text("skill_command").notNull(), // bv "/ads-meta"
-  isActive: boolean("is_active").default(true).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-});
+export const services = pgTable(
+  "services",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    slug: text("slug").notNull(),
+    displayName: text("display_name").notNull(),
+    description: text("description").notNull(),
+    iconName: text("icon_name").notNull(),
+    category: serviceCategoryEnum("category").notNull(),
+    estimatedTurnaroundHours: integer("estimated_turnaround_hours").default(24).notNull(),
+    priceCents: integer("price_cents").default(0).notNull(),
+    skillCommand: text("skill_command").default("").notNull(), // bv "/ads-meta"
+    isActive: boolean("is_active").default(true).notNull(),
+    isPackage: boolean("is_package").default(false).notNull(),
+    packageIncludes: text("package_includes"), // markdown list of what's in package
+    // null = global catalog service; uuid = agency-owned custom service
+    agencyId: uuid("agency_id").references(() => agencies.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    unique("services_slug_agency_unique").on(t.slug, t.agencyId),
+  ]
+);
 
 // ============================================================
 // SERVICE REQUESTS — de queue
@@ -219,6 +229,9 @@ export const serviceRequests = pgTable(
     startedAt: timestamp("started_at", { withTimezone: true }),
     completedAt: timestamp("completed_at", { withTimezone: true }),
     operatorNotes: text("operator_notes"),
+    calendarEventId: text("calendar_event_id"),
+    estimatedDelivery: timestamp("estimated_delivery", { withTimezone: true }),
+    clientNote: text("client_note"),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
@@ -385,6 +398,223 @@ export const agencyIntegrations = pgTable(
 
 export type AgencyIntegration = typeof agencyIntegrations.$inferSelect;
 export type NewAgencyIntegration = typeof agencyIntegrations.$inferInsert;
+
+// ============================================================
+// ALERT RULES — automatische KPI drempelwaarde notificaties
+// ============================================================
+
+export const alertRules = pgTable(
+  "alert_rules",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    agencyId: uuid("agency_id").notNull().references(() => agencies.id, { onDelete: "cascade" }),
+    clientId: uuid("client_id").references(() => clients.id, { onDelete: "cascade" }),
+    metric: text("metric").notNull(), // "roas" | "spend" | "conversions" | "ctr"
+    condition: text("condition").notNull(), // "above" | "below"
+    threshold: numeric("threshold", { precision: 10, scale: 4 }).notNull(),
+    notifyEmail: boolean("notify_email").default(true).notNull(),
+    isActive: boolean("is_active").default(true).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_alert_rules_agency_id").on(t.agencyId),
+    index("idx_alert_rules_client_id").on(t.clientId),
+  ]
+);
+
+export type AlertRule = typeof alertRules.$inferSelect;
+export type NewAlertRule = typeof alertRules.$inferInsert;
+
+// ============================================================
+// PROPOSALS — goedkeuringsflow voor strategie- en budgetwijzigingen
+// ============================================================
+
+export const proposals = pgTable(
+  "proposals",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    agencyId: uuid("agency_id").notNull().references(() => agencies.id, { onDelete: "cascade" }),
+    clientId: uuid("client_id").notNull().references(() => clients.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    proposalType: text("proposal_type").notNull(), // "budget_change" | "strategy_change" | "new_campaign" | "other"
+    currentValue: text("current_value"),
+    proposedValue: text("proposed_value"),
+    status: text("status").default("pending").notNull(), // "pending" | "approved" | "rejected"
+    clientNote: text("client_note"),
+    respondedAt: timestamp("responded_at", { withTimezone: true }),
+    expiresAt: timestamp("expires_at", { withTimezone: true }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_proposals_agency_id").on(t.agencyId),
+    index("idx_proposals_client_id").on(t.clientId),
+    index("idx_proposals_status").on(t.status),
+  ]
+);
+
+export type Proposal = typeof proposals.$inferSelect;
+export type NewProposal = typeof proposals.$inferInsert;
+
+// ============================================================
+// AGENCY DOCUMENTS — document automation / onboarding module
+// ============================================================
+
+export const agencyDocuments = pgTable(
+  "agency_documents",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    agencyId: uuid("agency_id").notNull().references(() => agencies.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    description: text("description"),
+    fileUrl: text("file_url").notNull(), // Supabase Storage public URL
+    fileName: text("file_name").notNull(),
+    fileSizeBytes: integer("file_size_bytes"),
+    sendTrigger: text("send_trigger").notNull(), // "on_client_created" | "monthly" | "manual"
+    sendOnDay: integer("send_on_day"), // day of month for monthly trigger
+    emailSubject: text("email_subject").notNull(),
+    emailBody: text("email_body").notNull(),
+    isActive: boolean("is_active").default(true).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_agency_documents_agency_id").on(t.agencyId),
+  ]
+);
+
+export type AgencyDocument = typeof agencyDocuments.$inferSelect;
+export type NewAgencyDocument = typeof agencyDocuments.$inferInsert;
+
+// ============================================================
+// DOCUMENT SENDS — log van verzonden documenten
+// ============================================================
+
+export const documentSends = pgTable(
+  "document_sends",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    documentId: uuid("document_id").notNull().references(() => agencyDocuments.id, { onDelete: "cascade" }),
+    clientId: uuid("client_id").notNull().references(() => clients.id, { onDelete: "cascade" }),
+    emailAddress: text("email_address").notNull(),
+    status: text("status").notNull(), // "sent" | "failed"
+    errorMessage: text("error_message"),
+    sentAt: timestamp("sent_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_document_sends_document_id").on(t.documentId),
+    index("idx_document_sends_client_id").on(t.clientId),
+  ]
+);
+
+export type DocumentSend = typeof documentSends.$inferSelect;
+export type NewDocumentSend = typeof documentSends.$inferInsert;
+
+// ============================================================
+// CHAT
+// ============================================================
+
+export const chatRooms = pgTable(
+  "chat_rooms",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    agencyId: uuid("agency_id").notNull().references(() => agencies.id, { onDelete: "cascade" }),
+    clientId: uuid("client_id").notNull().references(() => clients.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_chat_rooms_agency").on(t.agencyId),
+    index("idx_chat_rooms_client").on(t.clientId),
+    unique("chat_rooms_agency_client_unique").on(t.agencyId, t.clientId),
+  ]
+);
+
+export const chatMessages = pgTable(
+  "chat_messages",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    roomId: uuid("room_id").notNull().references(() => chatRooms.id, { onDelete: "cascade" }),
+    senderType: text("sender_type").notNull(), // "agency" | "client"
+    senderName: text("sender_name").notNull(),
+    content: text("content").notNull(),
+    isRead: boolean("is_read").default(false).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_chat_messages_room").on(t.roomId),
+  ]
+);
+
+export type ChatRoom = typeof chatRooms.$inferSelect;
+export type ChatMessage = typeof chatMessages.$inferSelect;
+
+// ============================================================
+// CLIENT DOCUMENTS
+// ============================================================
+
+export const clientDocuments = pgTable(
+  "client_documents",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id").notNull().references(() => clients.id, { onDelete: "cascade" }),
+    agencyId: uuid("agency_id").notNull().references(() => agencies.id, { onDelete: "cascade" }),
+    fileName: text("file_name").notNull(),
+    fileUrl: text("file_url").notNull(),
+    fileType: text("file_type").notNull(), // "image" | "video" | "pdf" | "other"
+    fileSizeBytes: integer("file_size_bytes"),
+    uploadedBy: text("uploaded_by").notNull(), // "client" | "agency"
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_client_documents_client").on(t.clientId),
+    index("idx_client_documents_agency").on(t.agencyId),
+  ]
+);
+
+export type ClientDocument = typeof clientDocuments.$inferSelect;
+
+// ============================================================
+// PUSH SUBSCRIPTIONS
+// ============================================================
+
+export const pushSubscriptions = pgTable(
+  "push_subscriptions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    clientId: uuid("client_id").notNull().references(() => clients.id, { onDelete: "cascade" }),
+    endpoint: text("endpoint").notNull().unique(),
+    p256dh: text("p256dh").notNull(),
+    auth: text("auth").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_push_subscriptions_client").on(t.clientId),
+  ]
+);
+
+export type PushSubscription = typeof pushSubscriptions.$inferSelect;
+
+// ============================================================
+// BOT KNOWLEDGE BASE
+// ============================================================
+
+export const botKnowledge = pgTable(
+  "bot_knowledge",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    agencyId: uuid("agency_id").notNull().references(() => agencies.id, { onDelete: "cascade" }),
+    question: text("question").notNull(),
+    answer: text("answer").notNull(),
+    category: text("category"),
+    isActive: boolean("is_active").default(true).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_bot_knowledge_agency").on(t.agencyId),
+  ]
+);
+
+export type BotKnowledge = typeof botKnowledge.$inferSelect;
 
 // ============================================================
 // RELATIONS

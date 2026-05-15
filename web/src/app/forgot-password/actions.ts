@@ -13,7 +13,7 @@ export async function sendPasswordReset(
   if (!email) return { error: "Vul een email in." };
 
   const supabase = await createSupabaseServer();
-  const origin = env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3001";
+  const origin = env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3002";
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${origin}/reset-password`,

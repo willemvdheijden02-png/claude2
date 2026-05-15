@@ -17,6 +17,7 @@ import {
   Settings,
   Sparkles,
   Users,
+  Video,
   X,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,7 @@ const items = [
   { href: "/portal/clients", icon: Users, label: "Klanten" },
   { href: "/portal/ads", icon: BarChart3, label: "Ads Manager" },
   { href: "/portal/services", icon: Sparkles, label: "Service-catalogus" },
+  { href: "/portal/studio", icon: Video, label: "Studio" },
   { href: "/portal/agents", icon: Bot, label: "Agents" },
   { href: "/portal/requests", icon: Inbox, label: "Aanvragen" },
   { href: "/portal/reports", icon: FileText, label: "Rapporten" },
@@ -42,12 +44,14 @@ export function AgencySidebar({
   userName,
   userRole,
   isOperator,
+  plan,
 }: {
   agencyName: string;
   agencyInitial: string;
   userName: string;
   userRole: string;
   isOperator?: boolean;
+  plan?: string;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -167,7 +171,7 @@ export function AgencySidebar({
             </form>
           </div>
           <Badge tone="neutral" className="h-[18px] px-1.5 text-[9px] w-full justify-center mt-2">
-            TRIAL
+            {(plan ?? "trial").toUpperCase()}
           </Badge>
         </div>
       </aside>

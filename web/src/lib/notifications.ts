@@ -106,7 +106,7 @@ async function sendNotificationEmail(notificationId: string) {
   }
   if (!toEmail) return;
 
-  const siteUrl = env("NEXT_PUBLIC_SITE_URL") ?? "http://localhost:3001";
+  const siteUrl = env("NEXT_PUBLIC_SITE_URL") ?? "http://localhost:3002";
   const linkUrl = notif.link ? (notif.link.startsWith("http") ? notif.link : `${siteUrl}${notif.link}`) : null;
 
   const html = `<!DOCTYPE html>

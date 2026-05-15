@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { eq, desc } from "drizzle-orm";
+import { and, eq, desc, count, inArray } from "drizzle-orm";
 import { Topbar } from "@/components/shell/topbar";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
@@ -12,13 +12,24 @@ export default async function ClientsPage() {
   const ctx = await getCurrentContext();
   if (!ctx?.agency) redirect("/onboarding");
 
-  const clients = await db
-    .select()
-    .from(schema.clients)
-    .where(eq(schema.clients.agencyId, ctx.agency.id))
-    .orderBy(desc(schema.clients.createdAt));
+  const [clients, activeRequestsResult] = await Promise.all([
+    db
+      .select()
+      .from(schema.clients)
+      .where(eq(schema.clients.agencyId, ctx.agency.id))
+      .orderBy(desc(schema.clients.createdAt)),
+    db
+      .select({ count: count() })
+      .from(schema.serviceRequests)
+      .where(
+        and(
+          eq(schema.serviceRequests.agencyId, ctx.agency.id),
+          inArray(schema.serviceRequests.status, ["pending", "in_progress"])
+        )
+      ),
+  ]);
 
-  const activeRequestsCount = 0; // placeholder — komt zodra service_requests gevuld is
+  const activeRequestsCount = activeRequestsResult[0]?.count ?? 0;
 
   return (
     <>

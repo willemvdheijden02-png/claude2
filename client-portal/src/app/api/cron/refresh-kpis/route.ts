@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const agencyUrl = process.env.AGENCY_APP_URL ?? "http://localhost:3001";
+  const agencyUrl = process.env.AGENCY_APP_URL ?? "http://localhost:3002";
   const cronSecret = process.env.CRON_SECRET ?? "";
 
   try {

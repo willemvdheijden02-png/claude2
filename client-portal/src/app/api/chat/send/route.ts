@@ -10,6 +10,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing fields." }, { status: 400 });
     }
 
+    // Only clients may post via this public endpoint — prevent spoofing agency messages
+    if (senderType !== "client") {
+      return NextResponse.json({ error: "Invalid senderType." }, { status: 403 });
+    }
+
     await db.insert(schema.chatMessages).values({
       roomId,
       content,

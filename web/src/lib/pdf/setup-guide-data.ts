@@ -270,7 +270,7 @@ export const SETUP_GUIDE_SECTIONS: Section[] = [
           "Save → skip scopes → skip test users → Back to Dashboard",
           "APIs & Services → Credentials → + Create Credentials → OAuth client ID",
           "Application type: Web application — Name: Willoe Web",
-          "Authorized JavaScript origins: http://localhost:3001",
+          "Authorized JavaScript origins: http://localhost:3002",
           "Authorized redirect URIs: https://JOUW-SUPABASE-REF.supabase.co/auth/v1/callback (vraag Claude Code voor de exacte URL)",
           "Create → kopieer Client ID + Client Secret",
         ],
@@ -418,7 +418,7 @@ export const SETUP_GUIDE_SECTIONS: Section[] = [
           ".env.local invullen met alle keys (URL-encodet special chars in DB password)",
           "Database migraties runnen (9 tabellen + RLS policies + auth triggers + 12 services seed)",
           "Verificatie dat de DB klopt",
-          "Dev server starten op http://localhost:3001",
+          "Dev server starten op http://localhost:3002",
           "Je doorheen leiden om eerste agency aan te maken en eerste klant toe te voegen",
         ],
       },
@@ -431,7 +431,7 @@ export const SETUP_GUIDE_SECTIONS: Section[] = [
   {
     title: "Stap 4 — Het werkt — wat nu?",
     blocks: [
-      { type: "p", text: "Wanneer Claude Code zegt 'klaar', open je http://localhost:3001 en test je:" },
+      { type: "p", text: "Wanneer Claude Code zegt 'klaar', open je http://localhost:3002 en test je:" },
       {
         type: "ol",
         items: [

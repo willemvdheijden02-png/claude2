@@ -192,7 +192,7 @@ function ServiceCard({ service, token }: { service: Service; token: string }) {
           {formatPrice(service.priceCents, service.estimatedTurnaroundHours)}
         </span>
         <a
-          href={`orders/new?serviceId=${service.id}`}
+          href={`/${token}/orders/new?serviceId=${service.id}`}
           style={{
             display: "inline-flex",
             alignItems: "center",

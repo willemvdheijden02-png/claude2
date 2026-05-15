@@ -150,7 +150,7 @@ export async function enableClientPortal(
     })
     .where(eq(schema.clients.id, clientId));
 
-  const siteUrl = env("NEXT_PUBLIC_SITE_URL") ?? "http://localhost:3001";
+  const siteUrl = env("NEXT_PUBLIC_SITE_URL") ?? "http://localhost:3002";
   const portalUrl = `${siteUrl}/c/${token}`;
 
   const sent = await sendPortalMagicLink(
@@ -195,7 +195,7 @@ export async function resendPortalMagicLink(
     return { error: "Portal is niet ingeschakeld voor deze klant." };
   }
 
-  const siteUrl = env("NEXT_PUBLIC_SITE_URL") ?? "http://localhost:3001";
+  const siteUrl = env("NEXT_PUBLIC_SITE_URL") ?? "http://localhost:3002";
   const portalUrl = `${siteUrl}/c/${client.portalToken}`;
 
   const sent = await sendPortalMagicLink(

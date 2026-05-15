@@ -55,6 +55,7 @@ export default async function PortalLayout({
         userName={ctx.profile?.fullName ?? ctx.authUser.email ?? "Gebruiker"}
         userRole={isOperator ? "Operator + Agency" : "Agency admin"}
         isOperator={isOperator}
+        plan={ctx.agency.plan}
       />
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Impersonation banner — alleen zichtbaar voor operators die meekijken */}

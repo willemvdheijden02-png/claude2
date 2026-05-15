@@ -1,11 +1,18 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { getAuthUser } from "@/lib/auth/current";
 import { db, schema } from "@/lib/db";
 import { eq } from "drizzle-orm";
 
-export type OnboardingResult = { error: string } | { success: true };
+export type OnboardingResult =
+  | { error: string; success?: never; agencyId?: never }
+  | { success: true; agencyId: string; error?: never };
+
+export type SimpleResult =
+  | { error: string; success?: never }
+  | { success: true; error?: never };
+
+export type ServiceCategory = typeof schema.services.$inferInsert["category"];
 
 function slugify(input: string): string {
   return input
@@ -17,6 +24,11 @@ function slugify(input: string): string {
     .slice(0, 40);
 }
 
+/**
+ * Step 1 — agency aanmaken.
+ * Geeft agencyId terug zodat de wizard door kan gaan naar stap 2.
+ * (Redirect naar /portal zit in de wizard zelf, bij step 5.)
+ */
 export async function createAgency(
   _prev: OnboardingResult | null,
   formData: FormData
@@ -30,14 +42,14 @@ export async function createAgency(
   if (!displayName) return { error: "Vul een agency-naam in." };
   if (displayName.length < 2) return { error: "Naam moet minimaal 2 tekens zijn." };
 
-  // Idempotent: als user al een agency heeft, ga gewoon naar portal
+  // Idempotent: als user al een agency heeft, stuur ze gewoon naar die agency
   const [existingForUser] = await db
     .select()
     .from(schema.agencies)
     .where(eq(schema.agencies.adminUserId, user.id))
     .limit(1);
   if (existingForUser) {
-    redirect("/portal");
+    return { success: true, agencyId: existingForUser.id };
   }
 
   // Unieke slug genereren
@@ -57,19 +69,128 @@ export async function createAgency(
   }
 
   try {
-    await db.insert(schema.agencies).values({
-      slug,
-      displayName,
-      adminUserId: user.id,
-      primaryColor,
-      accentColor: primaryColor,
-      status: "trial",
-    });
+    const [agency] = await db
+      .insert(schema.agencies)
+      .values({
+        slug,
+        displayName,
+        adminUserId: user.id,
+        primaryColor,
+        accentColor: primaryColor,
+        status: "trial",
+      })
+      .returning({ id: schema.agencies.id });
+
+    if (!agency) return { error: "Kon agency niet aanmaken." };
+    return { success: true, agencyId: agency.id };
   } catch (err) {
     return {
       error: err instanceof Error ? err.message : "Kon agency niet aanmaken.",
     };
   }
+}
 
-  redirect("/portal");
+/**
+ * Step 2 — logo URL opslaan (na upload via /api/upload/logo).
+ */
+export async function updateAgencyLogo(
+  agencyId: string,
+  logoUrl: string
+): Promise<SimpleResult> {
+  const user = await getAuthUser();
+  if (!user) return { error: "Niet ingelogd." };
+
+  if (!logoUrl) return { error: "Geen logo URL opgegeven." };
+
+  try {
+    await db
+      .update(schema.agencies)
+      .set({ logoUrl, updatedAt: new Date() })
+      .where(eq(schema.agencies.id, agencyId));
+
+    return { success: true };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Logo opslaan mislukt." };
+  }
+}
+
+/**
+ * Step 3 — API koppeling opslaan (Meta, Google Ads, etc.).
+ */
+export async function saveOnboardingIntegration(
+  agencyId: string,
+  provider: typeof schema.agencyIntegrations.$inferInsert["provider"],
+  credentials: Record<string, string>
+): Promise<SimpleResult> {
+  const user = await getAuthUser();
+  if (!user) return { error: "Niet ingelogd." };
+
+  if (!agencyId || !provider || !credentials) return { error: "Ongeldige invoer." };
+
+  try {
+    await db
+      .insert(schema.agencyIntegrations)
+      .values({
+        agencyId,
+        provider,
+        credentials,
+        status: "connected",
+      })
+      .onConflictDoUpdate({
+        target: [schema.agencyIntegrations.agencyId, schema.agencyIntegrations.provider],
+        set: {
+          credentials,
+          status: "connected",
+          lastVerifiedAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+
+    return { success: true };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Koppeling opslaan mislukt." };
+  }
+}
+
+/**
+ * Step 4 — eerste dienst aanmaken.
+ */
+export async function createOnboardingService(
+  agencyId: string,
+  data: {
+    name: string;
+    category: ServiceCategory;
+    priceEur: string;
+    description: string;
+  }
+): Promise<SimpleResult> {
+  const user = await getAuthUser();
+  if (!user) return { error: "Niet ingelogd." };
+
+  const displayName = data.name.trim();
+  if (!displayName) return { error: "Vul een dienstnaam in." };
+
+  const priceRaw = parseFloat(data.priceEur || "0");
+  const priceCents = isNaN(priceRaw) ? 0 : Math.round(priceRaw * 100);
+
+  const baseSlug = slugify(displayName);
+  const slug = `${baseSlug}-${agencyId.slice(0, 8)}`;
+
+  try {
+    await db.insert(schema.services).values({
+      slug,
+      displayName,
+      description: data.description.trim() || displayName,
+      iconName: "sparkles",
+      category: data.category,
+      priceCents,
+      skillCommand: "",
+      isActive: true,
+      agencyId,
+    });
+
+    return { success: true };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Dienst aanmaken mislukt." };
+  }
 }

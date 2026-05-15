@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
   try {
     const stripe = getStripe(); // Willoe's eigen Stripe account
     const priceId = getStripePriceId(plan);
-    const origin = env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3001";
+    const origin = env("NEXT_PUBLIC_SITE_URL") || "http://localhost:3002";
 
     // Maak/zoek Stripe customer
     let customerId = ctx.agency.stripeCustomerId;
