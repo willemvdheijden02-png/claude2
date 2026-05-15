@@ -133,16 +133,62 @@ export default async function IntegrationsPage() {
   if (!ctx?.agency) redirect("/onboarding");
 
   const integrations = await getAllIntegrations(ctx.agency.id);
+  const connectedCount = integrations.filter((i) => i.status === "connected").length;
 
   return (
     <>
       <Topbar
-        title="Integraties"
-        description="Koppel je eigen API keys — kosten gaan dan op jouw account, niet die van Willoe"
+        title="Koppelingen"
+        description="Jouw eigen API-keys — volledig geïsoleerd van andere agencies"
       />
-      <div className="p-4 md:p-6 max-w-4xl">
+      <div className="p-4 md:p-6 max-w-4xl space-y-6">
+
+        {/* Data-isolatie info banner */}
+        <div className="rounded-xl border border-[var(--border-default)] bg-[var(--bg-surface)] overflow-hidden">
+          <div className="px-5 py-4 border-b border-[var(--border-default)] flex items-center gap-3">
+            <div className="size-8 rounded-lg bg-[var(--accent-500)]/15 flex items-center justify-center">
+              <svg className="size-4 text-[var(--accent-500)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-[13px] font-medium text-[var(--text-primary)]">Jouw data is van jou</p>
+              <p className="text-[11px] text-[var(--text-tertiary)]">
+                {connectedCount} van 6 koppelingen actief · {ctx.agency.displayName}
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[var(--border-default)]">
+            <IsolationPill
+              icon="🔑"
+              title="Eigen API-keys"
+              body="Elke koppeling die je hier toevoegt staat alleen op jouw account. Geen andere agency ziet of gebruikt jouw keys."
+            />
+            <IsolationPill
+              icon="🗄️"
+              title="Eigen data"
+              body="Klantdata, KPIs, opdrachten en documenten zijn volledig geïsoleerd. Andere agencies zien nooit jouw klanten."
+            />
+            <IsolationPill
+              icon="💳"
+              title="Eigen kosten"
+              body="API-kosten (Meta, Google, Anthropic) gaan direct op jouw account. Je betaalt alleen wat jij gebruikt."
+            />
+          </div>
+        </div>
+
         <IntegrationsList existing={integrations} info={PROVIDER_INFO} />
       </div>
     </>
+  );
+}
+
+function IsolationPill({ icon, title, body }: { icon: string; title: string; body: string }) {
+  return (
+    <div className="px-5 py-4">
+      <div className="text-[18px] mb-2">{icon}</div>
+      <p className="text-[12px] font-medium text-[var(--text-primary)] mb-1">{title}</p>
+      <p className="text-[11px] text-[var(--text-tertiary)] leading-relaxed">{body}</p>
+    </div>
   );
 }
