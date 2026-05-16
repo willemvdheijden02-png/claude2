@@ -89,17 +89,17 @@ export default function AgentsPage() {
         title="Agents"
         description="8 gespecialiseerde AI-agents die samenwerken"
       />
-      <div className="p-6">
-        {/* Stats bar */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="p-4 md:p-6">
+        {/* Stats bar — 2 cols on mobile, 4 on desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-5 md:mb-6">
           <StatCard icon={<Bot className="size-4" />} label="Actieve agents" value="8" />
           <StatCard icon={<Zap className="size-4" />} label="Capabilities" value="32" />
-          <StatCard icon={<Users className="size-4" />} label="Samenwerking" value="Auto-routing" />
+          <StatCard icon={<Users className="size-4" />} label="Samenwerking" value="Auto" />
           <StatCard icon={<CheckCircle className="size-4" />} label="Status" value="Online" accent />
         </div>
 
-        {/* Agent grid */}
-        <div className="grid grid-cols-3 gap-4">
+        {/* Agent grid — 1 col mobile, 2 tablet, 3 desktop */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {AGENTS.map((agent) => (
             <AgentCard key={agent.id} agent={agent} />
           ))}
@@ -122,15 +122,15 @@ function StatCard({
 }) {
   return (
     <Card>
-      <CardContent className="p-4">
-        <div className="flex items-center gap-2 mb-1">
+      <CardContent className="p-3 md:p-4">
+        <div className="flex items-center gap-1.5 mb-1">
           <span className="text-[var(--text-tertiary)]">{icon}</span>
-          <span className="text-[10px] uppercase tracking-[0.08em] text-[var(--text-tertiary)] font-medium">
+          <span className="text-[10px] uppercase tracking-[0.06em] text-[var(--text-tertiary)] font-medium leading-none truncate">
             {label}
           </span>
         </div>
         <div
-          className={`text-[20px] font-medium tracking-display ${
+          className={`text-[18px] md:text-[20px] font-medium tracking-display leading-none mt-1 ${
             accent ? "text-[var(--status-success)]" : "text-[var(--text-primary)]"
           }`}
         >
@@ -147,7 +147,7 @@ function AgentCard({ agent }: { agent: (typeof AGENTS)[number] }) {
       {/* Colored top border */}
       <div className="h-1 w-full" style={{ backgroundColor: agent.color }} />
 
-      <div className="p-5 flex flex-col flex-1">
+      <div className="p-4 md:p-5 flex flex-col flex-1">
         {/* Header */}
         <div className="flex items-start gap-3 mb-3">
           <div
@@ -156,19 +156,17 @@ function AgentCard({ agent }: { agent: (typeof AGENTS)[number] }) {
           >
             {agent.icon}
           </div>
-          <div className="min-w-0">
-            <div className="text-[14px] font-medium text-[var(--text-primary)] leading-tight">
+          <div className="min-w-0 flex-1">
+            <div className="text-[14px] font-semibold text-[var(--text-primary)] leading-tight">
               {agent.name}
             </div>
-            <Badge tone="neutral" className="h-[18px] px-1.5 text-[9px] mt-1">
-              {agent.tasks.length} capabilities
-            </Badge>
+            <div className="text-[11px] text-[var(--text-tertiary)] mt-0.5 font-medium">
+              {agent.sub}
+            </div>
           </div>
-        </div>
-
-        {/* Subtitle */}
-        <div className="text-[11px] text-[var(--text-tertiary)] uppercase tracking-[0.06em] font-medium mb-2">
-          {agent.sub}
+          <Badge tone="neutral" className="h-[18px] px-1.5 text-[9px] shrink-0">
+            {agent.tasks.length} taken
+          </Badge>
         </div>
 
         {/* Description */}
@@ -182,7 +180,7 @@ function AgentCard({ agent }: { agent: (typeof AGENTS)[number] }) {
             <Link
               key={task}
               href={`/portal/agents/${agent.id}?task=${encodeURIComponent(task)}`}
-              className="inline-flex items-center h-[26px] px-2.5 rounded-md border border-[var(--border-default)] text-[11px] text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors"
+              className="inline-flex items-center h-7 px-2.5 rounded-md border border-[var(--border-default)] text-[11px] text-[var(--text-secondary)] hover:border-[var(--border-strong)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors"
             >
               {task}
             </Link>

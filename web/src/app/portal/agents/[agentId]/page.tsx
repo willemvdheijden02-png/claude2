@@ -288,19 +288,19 @@ export default function AgentChatPage() {
         {/* Chat panel */}
         <main className="flex flex-col min-w-0">
           {/* Messages */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto px-8 py-8">
+          <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 md:px-8 md:py-8">
             {messages.length === 0 ? (
-              <div className="max-w-2xl mx-auto pt-12 text-center">
+              <div className="max-w-2xl mx-auto pt-8 md:pt-12 text-center">
                 <div
-                  className="size-14 rounded-xl grid place-items-center mx-auto mb-4 text-[28px]"
+                  className="size-12 md:size-14 rounded-xl grid place-items-center mx-auto mb-3 md:mb-4 text-[24px] md:text-[28px]"
                   style={{ backgroundColor: `${agent.color}18` }}
                 >
                   {agent.icon}
                 </div>
-                <h2 className="text-[20px] font-medium tracking-display mb-2">
+                <h2 className="text-[17px] md:text-[20px] font-medium tracking-display mb-2">
                   {agent.name}
                 </h2>
-                <p className="text-[var(--text-secondary)] text-[14px] mb-8">
+                <p className="text-[var(--text-secondary)] text-[13px] md:text-[14px] mb-6 md:mb-8 px-2">
                   {agent.desc} Stel een vraag of gebruik een snelle taak.
                 </p>
                 <div className="flex flex-wrap gap-2 justify-center">
@@ -317,7 +317,7 @@ export default function AgentChatPage() {
                 </div>
               </div>
             ) : (
-              <div className="space-y-6 max-w-3xl mx-auto">
+              <div className="space-y-5 md:space-y-6 max-w-3xl mx-auto">
                 {messages.map((m) => (
                   <ChatMessage key={m.id} message={m} agentColor={agent.color} agentIcon={agent.icon} agentName={agent.name} />
                 ))}
@@ -329,7 +329,7 @@ export default function AgentChatPage() {
           {/* Composer */}
           <form
             onSubmit={handleSubmit}
-            className="border-t border-[var(--border-default)] p-4"
+            className="border-t border-[var(--border-default)] p-3 md:p-4"
           >
             <div className="border border-[var(--border-default)] rounded-[var(--radius-lg)] bg-[var(--bg-surface)] p-2.5 max-w-3xl mx-auto focus-within:border-[var(--accent-500)] focus-within:shadow-[0_0_0_3px_var(--accent-glow)] transition-all">
               <div className="flex items-end gap-2">
@@ -352,7 +352,7 @@ export default function AgentChatPage() {
                 </button>
               </div>
             </div>
-            <p className="text-center text-[10px] text-[var(--text-tertiary)] mt-2">
+            <p className="hidden md:block text-center text-[10px] text-[var(--text-tertiary)] mt-2">
               Enter om te versturen · Shift+Enter voor nieuwe regel
             </p>
           </form>
@@ -376,7 +376,7 @@ function ChatMessage({
   if (message.role === "user") {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[80%] bg-[var(--bg-surface-2)] border border-[var(--border-default)] rounded-[var(--radius-lg)] rounded-tr-sm px-4 py-3 text-[13px] leading-relaxed whitespace-pre-wrap">
+        <div className="max-w-[90%] md:max-w-[80%] bg-[var(--bg-surface-2)] border border-[var(--border-default)] rounded-[var(--radius-lg)] rounded-tr-sm px-3 py-2.5 md:px-4 md:py-3 text-[13px] leading-relaxed whitespace-pre-wrap">
           {message.content}
         </div>
       </div>
