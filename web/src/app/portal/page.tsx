@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { eq, and, count, avg, inArray, gte, desc } from "drizzle-orm";
+import { eq, and, count, inArray, gte, desc } from "drizzle-orm";
 import { ArrowUpRight, Download, GaugeCircle, PenTool, Search, Sparkles } from "lucide-react";
 import { Topbar } from "@/components/shell/topbar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,7 +45,6 @@ export default async function PortalOverviewPage() {
     clientCountResult,
     activeRequestsResult,
     completedThisMonthResult,
-    turnaroundResult,
     recentReports,
   ] = await Promise.all([
     // Total active clients
@@ -79,17 +78,6 @@ export default async function PortalOverviewPage() {
           eq(schema.serviceRequests.agencyId, agency.id),
           eq(schema.serviceRequests.status, "done"),
           gte(schema.serviceRequests.completedAt, monthStart)
-        )
-      ),
-
-    // Average turnaround (completed requests with both timestamps)
-    db
-      .select({ avg: avg(schema.serviceRequests.completedAt) })
-      .from(schema.serviceRequests)
-      .where(
-        and(
-          eq(schema.serviceRequests.agencyId, agency.id),
-          eq(schema.serviceRequests.status, "done")
         )
       ),
 

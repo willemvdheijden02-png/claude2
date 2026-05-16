@@ -8,20 +8,18 @@ export default function PortalError({
   reset: () => void;
 }) {
   return (
-    <div style={{ padding: 40, fontFamily: "monospace", background: "#0a0a0f", color: "#e2e8f0", minHeight: "100vh" }}>
-      <h2 style={{ color: "#f87171", marginBottom: 16 }}>Portal fout (tijdelijke debug pagina)</h2>
-      <pre style={{ background: "#1e1e2e", padding: 16, borderRadius: 8, overflow: "auto", color: "#fbbf24", fontSize: 13 }}>
-        {error?.message ?? "Geen error message beschikbaar"}
-      </pre>
-      {error?.digest && (
-        <pre style={{ background: "#1e1e2e", padding: 16, borderRadius: 8, marginTop: 8, color: "#94a3b8", fontSize: 11 }}>
-          digest: {error.digest}
-        </pre>
-      )}
-      <pre style={{ background: "#1e1e2e", padding: 16, borderRadius: 8, marginTop: 8, color: "#64748b", fontSize: 11, overflow: "auto" }}>
-        {error?.stack ?? "Geen stack trace"}
-      </pre>
-      <button onClick={reset} style={{ marginTop: 16, background: "#2563eb", color: "white", border: "none", padding: "10px 20px", borderRadius: 8, cursor: "pointer" }}>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4 p-8 text-center">
+      <div className="text-4xl">⚠️</div>
+      <h2 className="text-[18px] font-semibold text-[var(--text-primary)]">
+        Er ging iets mis
+      </h2>
+      <p className="text-[13px] text-[var(--text-secondary)] max-w-xs">
+        De pagina kon niet geladen worden. Probeer het opnieuw of neem contact op als dit blijft gebeuren.
+      </p>
+      <button
+        onClick={reset}
+        className="px-4 h-9 rounded-lg bg-[var(--accent-500)] text-white text-[13px] font-medium hover:opacity-90 transition-opacity"
+      >
         Opnieuw proberen
       </button>
     </div>
