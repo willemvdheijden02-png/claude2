@@ -1,0 +1,9 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "scheduler/Dockerfile"
+
+[deploy]
+startCommand = "node src/index.js"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "always"

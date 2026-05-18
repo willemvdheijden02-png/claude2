@@ -1,0 +1,21 @@
+{
+  "name": "livoa-scheduler",
+  "version": "1.0.0",
+  "description": "24/7 Railway cron scheduler — alle geautomatiseerde taken voor Livoa",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0",
+    "@notionhq/client": "^2.2.15",
+    "axios": "^1.7.9",
+    "express": "^4.21.2",
+    "node-cron": "^3.0.3",
+    "resend": "^4.0.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
