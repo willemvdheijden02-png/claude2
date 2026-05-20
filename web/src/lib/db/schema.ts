@@ -96,6 +96,8 @@ export const notificationTypeEnum = pgEnum("notification_type", [
   "meta_token_expiring",
   "client_added",
   "integration_invalid",
+  "usage_limit_80",
+  "usage_limit_100",
   "general",
 ]);
 
@@ -139,6 +141,13 @@ export const agencies = pgTable(
     // Notification preferences
     notifyEmail: boolean("notify_email").default(true).notNull(),
     notifyEmailAddress: text("notify_email_address"),
+    // Usage tracking — maandelijkse tellers (reset 1e v/d maand)
+    aiCallsThisMonth: integer("ai_calls_this_month").default(0).notNull(),
+    metaCallsThisMonth: integer("meta_calls_this_month").default(0).notNull(),
+    schedulerRunsThisMonth: integer("scheduler_runs_this_month").default(0).notNull(),
+    usageResetAt: timestamp("usage_reset_at", { withTimezone: true }).defaultNow().notNull(),
+    usageAlert80Sent: boolean("usage_alert_80_sent").default(false).notNull(),
+    usageAlert100Sent: boolean("usage_alert_100_sent").default(false).notNull(),
     // BTW + facturatie config
     vatRate: integer("vat_rate").default(21).notNull(), // % — 0 voor KOR
     kvkNumber: text("kvk_number"),
@@ -615,6 +624,30 @@ export const botKnowledge = pgTable(
 );
 
 export type BotKnowledge = typeof botKnowledge.$inferSelect;
+
+// ============================================================
+// USAGE LOGS — per-agency API verbruik
+// ============================================================
+
+export const usageTypeEnum = pgEnum("usage_type", ["anthropic", "meta", "scheduler"]);
+
+export const usageLogs = pgTable(
+  "usage_logs",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    agencyId: uuid("agency_id").notNull().references(() => agencies.id, { onDelete: "cascade" }),
+    type: text("type").notNull(), // "anthropic" | "meta" | "scheduler"
+    count: integer("count").notNull().default(1),
+    metadata: jsonb("metadata").default({}),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [
+    index("idx_usage_logs_agency_type").on(t.agencyId, t.type),
+    index("idx_usage_logs_created_at").on(t.agencyId, t.createdAt),
+  ]
+);
+
+export type UsageLog = typeof usageLogs.$inferSelect;
 
 // ============================================================
 // RELATIONS

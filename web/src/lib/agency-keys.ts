@@ -1,8 +1,10 @@
-// BYOK helper: laadt agency-specifieke API keys uit DB.
-// Vervangt env() voor variabele-kosten services.
+// Agency keys helper: laadt API keys uit DB met fallback naar platform-keys (Willem's keys).
+// Agencies draaien standaard op de platform-keys zodat ze direct kunnen starten.
+// Ze kunnen optioneel hun eigen BYOK keys instellen in /portal/integrations.
 
 import { eq, and } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
+import { env } from "@/lib/env";
 
 export type IntegrationProvider =
   | "anthropic"
@@ -20,8 +22,51 @@ export class IntegrationNotConnectedError extends Error {
 }
 
 /**
- * Haalt credentials op voor een specifieke agency + provider.
- * Throws IntegrationNotConnectedError als niet geconnect of geen credentials.
+ * Platform-keys fallback — Willem's API keys als default voor alle agencies.
+ * Agencies kunnen dit overschrijven met hun eigen BYOK in /portal/integrations.
+ */
+function getPlatformKeys(provider: IntegrationProvider): Record<string, string> | null {
+  switch (provider) {
+    case "anthropic": {
+      const key = env("ANTHROPIC_API_KEY");
+      return key ? { api_key: key } : null;
+    }
+    case "gemini": {
+      const key = env("GOOGLE_API_KEY");
+      return key ? { api_key: key } : null;
+    }
+    case "meta": {
+      const token = env("META_ACCESS_TOKEN");
+      const appId = env("META_APP_ID");
+      if (!token) return null;
+      return {
+        access_token: token,
+        ...(appId ? { app_id: appId } : {}),
+      };
+    }
+    case "google_ads": {
+      const devToken = env("GOOGLE_ADS_DEVELOPER_TOKEN");
+      const customerId = env("GOOGLE_ADS_CUSTOMER_ID");
+      if (!devToken) return null;
+      return {
+        developer_token: devToken,
+        ...(customerId ? { customer_id: customerId } : {}),
+      };
+    }
+    case "resend": {
+      const key = env("RESEND_API_KEY");
+      return key ? { api_key: key } : null;
+    }
+    case "stripe":
+      // Stripe is altijd BYOK — elke agency heeft eigen Stripe account
+      return null;
+  }
+}
+
+/**
+ * Haalt credentials op voor een agency + provider.
+ * Prioriteit: 1. Agency's eigen keys (BYOK)  2. Platform keys (Willem's keys)
+ * Gooit IntegrationNotConnectedError als beide ontbreken.
  */
 export async function getAgencyCredentials(
   agencyId: string,
@@ -38,10 +83,16 @@ export async function getAgencyCredentials(
     )
     .limit(1);
 
-  if (!row || row.status !== "connected" || !row.credentials) {
-    throw new IntegrationNotConnectedError(provider);
+  // Agency heeft eigen werkende keys → gebruik die
+  if (row && row.status === "connected" && row.credentials && Object.keys(row.credentials).length > 0) {
+    return row.credentials as Record<string, string>;
   }
-  return row.credentials as Record<string, string>;
+
+  // Fallback: platform keys (alle agencies draaien standaard hierop)
+  const platformKeys = getPlatformKeys(provider);
+  if (platformKeys) return platformKeys;
+
+  throw new IntegrationNotConnectedError(provider);
 }
 
 /**

@@ -3,6 +3,7 @@
 import { getAuthUser } from "@/lib/auth/current";
 import { db, schema } from "@/lib/db";
 import { eq } from "drizzle-orm";
+import { seedPlatformIntegrations } from "@/lib/platform-seed";
 
 export type OnboardingResult =
   | { error: string; success?: never; agencyId?: never }
@@ -82,6 +83,12 @@ export async function createAgency(
       .returning({ id: schema.agencies.id });
 
     if (!agency) return { error: "Kon agency niet aanmaken." };
+
+    // Pre-vul platform integrations — agency draait direct op Willem's keys
+    await seedPlatformIntegrations(agency.id).catch((err) =>
+      console.error("[onboarding] seedPlatformIntegrations mislukt:", err)
+    );
+
     return { success: true, agencyId: agency.id };
   } catch (err) {
     return {

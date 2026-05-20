@@ -1,39 +1,41 @@
 import { createAnthropic } from "@ai-sdk/anthropic";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { env } from "@/lib/env";
-import { getAgencyKey, IntegrationNotConnectedError } from "@/lib/agency-keys";
+import { getAgencyCredentials, IntegrationNotConnectedError } from "@/lib/agency-keys";
 import { getCurrentContext } from "@/lib/auth/current";
+import { trackUsage, checkUsageAllowed } from "@/lib/usage";
 
 /**
- * BYOK: laadt agency-specifieke API keys uit DB.
- * Fallback naar env vars als de current user een operator is (Willem self-service).
+ * Laadt Anthropic client voor de huidige agency.
+ * Gebruikt agency's eigen keys (BYOK) of platform keys als fallback.
+ * Logt usage na elke call voor facturatie + limiet-bewaking.
  */
-
 export async function getAnthropicForCurrentAgency() {
   const ctx = await getCurrentContext();
   if (!ctx?.agency) throw new IntegrationNotConnectedError("anthropic");
 
-  // Operator fallback — Willem zelf mag eigen env key gebruiken voor testen
-  if (ctx.profile?.role === "operator") {
-    const envKey = env("ANTHROPIC_API_KEY");
-    if (envKey) return createAnthropic({ apiKey: envKey });
+  // Controleer of agency nog binnen limiet zit
+  const allowed = await checkUsageAllowed(ctx.agency.id, "anthropic");
+  if (!allowed) {
+    throw new Error(
+      "Je hebt je maandlimiet voor AI-calls bereikt. Upgrade je plan in /portal/billing."
+    );
   }
 
-  const apiKey = await getAgencyKey(ctx.agency.id, "anthropic", "api_key");
-  return createAnthropic({ apiKey });
+  const creds = await getAgencyCredentials(ctx.agency.id, "anthropic");
+  const client = createAnthropic({ apiKey: creds.api_key });
+
+  // Log de call (fire-and-forget — niet awaiten om stream niet te vertragen)
+  trackUsage(ctx.agency.id, "anthropic", 1).catch(console.error);
+
+  return client;
 }
 
 export async function getGoogleForCurrentAgency() {
   const ctx = await getCurrentContext();
   if (!ctx?.agency) throw new IntegrationNotConnectedError("gemini");
 
-  if (ctx.profile?.role === "operator") {
-    const envKey = env("GOOGLE_API_KEY");
-    if (envKey) return createGoogleGenerativeAI({ apiKey: envKey });
-  }
-
-  const apiKey = await getAgencyKey(ctx.agency.id, "gemini", "api_key");
-  return createGoogleGenerativeAI({ apiKey });
+  const creds = await getAgencyCredentials(ctx.agency.id, "gemini");
+  return createGoogleGenerativeAI({ apiKey: creds.api_key });
 }
 
 // Legacy helpers (operator only) — voor backwards compat tot we ze allemaal vervangen
