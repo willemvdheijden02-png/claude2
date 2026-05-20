@@ -4,7 +4,7 @@
  *   TWILIO_ACCOUNT_SID   — Account SID van console.twilio.com
  *   TWILIO_AUTH_TOKEN    — Auth Token van console.twilio.com
  *   TWILIO_WHATSAPP_FROM — bv "whatsapp:+14155238886" (Twilio sandbox) of jouw eigen nummer
- *   OWNER_WHATSAPP_TO    — jouw WhatsApp nummer bv "whatsapp:+31612345678"
+ *   TWILIO_WHATSAPP_TO    — jouw WhatsApp nummer bv "whatsapp:+31646876626"
  */
 
 import { env } from "@/lib/env";
@@ -13,7 +13,7 @@ export async function sendWhatsApp(message: string): Promise<void> {
   const accountSid = env("TWILIO_ACCOUNT_SID");
   const authToken  = env("TWILIO_AUTH_TOKEN");
   const from       = env("TWILIO_WHATSAPP_FROM");
-  const to         = env("OWNER_WHATSAPP_TO");
+  const to         = env("TWILIO_WHATSAPP_TO");
 
   if (!accountSid || !authToken || !from || !to) {
     // Niet geconfigureerd — log naar console zodat het op Railway zichtbaar is
