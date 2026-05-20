@@ -3,6 +3,7 @@ import { createGoogleGenerativeAI } from "@ai-sdk/google";
 import { getAgencyCredentials, IntegrationNotConnectedError } from "@/lib/agency-keys";
 import { getCurrentContext } from "@/lib/auth/current";
 import { trackUsage, checkUsageAllowed } from "@/lib/usage";
+import { env } from "@/lib/env";
 
 /**
  * Laadt Anthropic client voor de huidige agency.

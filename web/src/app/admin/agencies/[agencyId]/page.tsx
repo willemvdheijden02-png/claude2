@@ -17,6 +17,7 @@ import { getAllIntegrations } from "@/lib/agency-keys";
 import { getCurrentContext } from "@/lib/auth/current";
 import { startImpersonation } from "../../impersonate-actions";
 import { IntegrationsPanel } from "./integrations-panel";
+import { PlanPanel } from "./plan-panel";
 
 export default async function AdminAgencyDetailPage({
   params,
@@ -192,6 +193,17 @@ export default async function AdminAgencyDetailPage({
               )}
             </CardContent>
           </Card>
+
+          {/* ── Plan & Limieten ── */}
+          <PlanPanel
+            agencyId={agencyId}
+            currentPlan={agency.plan as "trial" | "starter" | "pro" | "scale" | "cancelled"}
+            usage={{
+              aiCalls: agency.aiCallsThisMonth,
+              metaCalls: agency.metaCallsThisMonth,
+              schedulerRuns: agency.schedulerRunsThisMonth,
+            }}
+          />
 
           {/* ── API Koppelingen ── */}
           <Card>
